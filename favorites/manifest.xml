@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="component" version="2.5.0" method="upgrade">
+    <name>Favorites</name>
+    <version>0.1.0</version>
+    <creationDate>May 2012</creationDate>
+    <author>Dioscouri.com</author>
+    <authorEmail>info@dioscouri.com</authorEmail>
+    <authorUrl>http://www.dioscouri.com</authorUrl>
+    <copyright>2009 Dioscouri.com</copyright>
+    <copyrightHolder>Dioscouri.com</copyrightHolder>
+    <license>GNU General Public License v2</license>
+    <description>A User Favorites Manager for Joomla</description>
+
+	<!-- Application/site -->    
+	<files folder="site">
+		<file>favorites.php</file>
+		<file>controller.php</file>
+		<file>index.html</file>
+		<folder>controllers</folder>
+		<folder>models</folder>
+		<folder>views</folder>
+	</files>
+
+	<languages folder="languages/site">
+		<language tag="en-GB">en-GB.com_favorites.ini</language>
+	</languages>
+	
+	<!-- Application/administrator -->
+	<administration>
+		<menu img="../media/com_favorites/images/favorites_16.png">COM_FAVORITES</menu>
+
+		<files folder="admin">
+            <file>defines.php</file>
+			<file>favorites.php</file>
+			<file>controller.php</file>
+			<file>index.html</file>
+			<folder>controllers</folder>
+			<folder>helpers</folder>
+			<folder>install</folder>
+			<folder>library</folder>
+			<folder>models</folder>
+			<folder>tables</folder>
+			<folder>views</folder>
+		</files>
+
+		<languages folder="languages/admin">
+			<language tag="en-GB">en-GB.com_favorites.ini</language>
+            <language tag="en-GB">en-GB.com_favorites.sys.ini</language>
+            <language tag="en-GB">en-GB.com_favorites.menu.ini</language>
+		</languages>
+	</administration>
+	
+	<!-- Installation -->
+	<install>
+		<sql>
+            <file>install.sql</file>
+		</sql>
+	</install>
+
+	<installfile>install.php</installfile>
+	<uninstallfile>uninstall.php</uninstallfile>
+
+	<!--  Media -->
+	<media destination="com_favorites" folder="media">
+		<folder>css</folder>
+		<folder>images</folder>
+		<folder>js</folder>
+        <folder>menus</folder>
+	</media>
+		
+	<!-- Modules -->	
+	<modules>
+		 <module module="mod_favorites" publish="true" client="site" position="left" />
+	</modules> 
+
+	<!-- Plugins -->
+	<plugins>
+		<!-- <plugin plugin="favorites_plugin_user" publish="false" group="user" element="favorites"/> -->
+		<!-- <plugin plugin="favorites_plugin_com_content" group="favorites" element="com_content" /> -->
+		<!-- <plugin plugin="favorites_plugin_menu" group="system" element="menu" /> -->
+	</plugins>
+</install>
