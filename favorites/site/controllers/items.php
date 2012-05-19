@@ -37,7 +37,18 @@ class FavoritesControllerItems extends FavoritesController
 		if (empty($model_name)) { $model_name = $this->get('suffix'); } 
 		$model = $this->getModel( $model_name );
 		$ns = $this->getNamespace();
-
+		 $user = JFactory::getUser(); 
+		$user_id = $user->id;
+	
+        if (!empty($user_id))
+        {
+           // use it
+            $model->setState( 'filter_userid', $user_id);           
+        } else {
+        	//GUEST
+        	// redirect to login probably
+        }
+		
 		$state['filter_enabled']  = 1;      
         
 		foreach (@$state as $key=>$value)
@@ -46,18 +57,14 @@ class FavoritesControllerItems extends FavoritesController
 		}
 
 		return $state;
-		var_dump($state);
+	
 	}
 	
 	function display()
 	{
-        $viewType   = JFactory::getDocument()->getType();
-        $viewName   = JRequest::getCmd( 'view', $this->getName() );
-        $viewLayout = JRequest::getCmd( 'layout', 'default' );
-        $view = & $this->getView( $viewName, $viewType, '', array( 'base_path'=>$this->_basePath) );
-                
-       
-	  
+        $view = $this->getView( 'items', 'html' );
+		$view->set( '_doTask', true );
+		$view->set( 'hidemenu', true );      
 
         JModel::addIncludePath( JPATH_ADMINISTRATOR.DS.'components'.DS.'com_favorites'.DS.'models' );
 	    $model = JModel::getInstance( 'Items', 'FavoritesModel' );
@@ -75,27 +82,23 @@ class FavoritesControllerItems extends FavoritesController
         }
         
         $query = $model->getQuery();
-
-       // $query->group( 'tbl.id');
+       // $query->group( 'tbl.type');
         $model->setQuery( $query );
         
         $app = JFactory::getApplication();
         $ns = $app->getName().'::'.'com.favorites.model.'.$model->getTable()->get('_suffix');
+
         $state = array();
-		// we can remove all this later if we decide not to handle them like normal paginated lists
-        /*$limit  = $app->getUserStateFromRequest('global.list.limit', 'limit', $app->getCfg('list_limit'), 'int');
-        $limitstart = JRequest::getVar('limitstart', '0', 'request', 'int');
-        $state['limitstart'] = ($limit != 0 ? (floor($limitstart / $limit) * $limit) : 0);
-        $state['limit']     = $app->getUserStateFromRequest('global.list.limit', 'limit', $app->getCfg('list_limit'), 'int');
-        $state['order']     = $app->getUserStateFromRequest($ns.'.filter_order', 'filter_order', 'tbl.'.$model->getTable()->getKeyName(), 'cmd');
-        $state['direction'] = $app->getUserStateFromRequest($ns.'.filter_direction', 'filter_direction', 'ASC', 'word');*/
+		
 	    foreach (@$state as $key=>$value)
         {
             $model->setState( $key, $value );
         }
-        
+  
+		$params		= $app->getParams();
         $items = $model->getList();
-        $view->assign( 'items', $items );
+	        $view->assign( 'items', $items );
+		 $view->assign( 'params', $params );
         $view->setModel( $model );
         
         parent::display();

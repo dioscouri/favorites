@@ -61,7 +61,7 @@ $controller = Favorites::getClass( $classname );
 $task = JRequest::getVar('task');
 if (empty($task))
 {
-    $task = 'display';  
+    $task = 'items';  
 }
 JRequest::setVar( 'task', $task );
 

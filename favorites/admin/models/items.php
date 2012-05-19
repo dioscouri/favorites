@@ -149,6 +149,7 @@ class FavoritesModelItems extends FavoritesModelBase
 		foreach(@$items as $item)
 		{
 			$item->link = 'index.php?option=com_favorites&controller=items&view=items&task=edit&id='.$item->id;
+			$item->edit_link = 'index.php?option=com_favorites&task=edit&tmpl=component&layout=form&id='.$item->id;
 			// Geting the username for list views, should we store the username in the favs table to cut overhead or better to do this? this avoids problems is someone changes  their username
 			$user = JFactory::getUser($item->user_id);
 			$item->username = $user->get('username');

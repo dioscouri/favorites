@@ -16,26 +16,12 @@ Favorites::load( 'FavoritesViewBase', 'views._base', array( 'site'=>'site', 'typ
 class FavoritesViewItems extends FavoritesViewBase 
 {
 	
-	function __contruct() {
-	
-	$task   = JRequest::getCmd( 'task', '' );
-		switch ($task) {
-			case 'edit':
-				$view->setLayout('form');
-				break;
-			
-			default:
-				
-				break;
-		}
-	parent::__contruct();	
-		
-	}
+
 	
 	function getLayoutVars($tpl=null) 
     {
         $layout = $this->getLayout();
-
+		
         switch(strtolower($layout))
         {
             case "form":
