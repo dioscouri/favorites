@@ -39,6 +39,14 @@ $js = "var com_favorites = {};\n";
 $js.= "com_favorites.jbase = '".$uri->root()."';\n";
 $doc->addScriptDeclaration($js);
 
+JHTML::_('stylesheet', 'admin.css', 'media/com_favorites/css/');
+
+$parentPath = JPATH_ADMINISTRATOR . '/components/com_favorites/helpers';
+DSCLoader::discover('MediamanagerHelper', $parentPath, true);
+
+$parentPath = JPATH_ADMINISTRATOR . '/components/com_favorites/library';
+DSCLoader::discover('Mediamanager', $parentPath, true);
+
 // load the plugins
 JPluginHelper::importPlugin( 'favorites' );
 

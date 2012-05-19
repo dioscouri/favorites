@@ -74,9 +74,10 @@
 	</modules> 
 
 	<!-- Plugins -->
-	<plugins>
-		<plugin plugin="favorites_favorites_url" publish="true" group="favorites" element="favorites_url" />
-		<!-- <plugin plugin="favorites_plugin_com_content" group="favorites" element="com_content" /> -->
-		<!-- <plugin plugin="favorites_plugin_menu" group="system" element="menu" /> -->
-	</plugins>
+	 <plugins>
+        <!-- Instructions: plugin="package_folder_containing_plugin_files" element="plugin_filename" -->
+        <!--<plugin plugin="favorites_favorites_url" publish="true" group="favorites" element="favorites_url" />-->
+        
+    </plugins>
+	
 </install>

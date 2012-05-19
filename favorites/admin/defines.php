@@ -13,28 +13,48 @@ defined('_JEXEC') or die('Restricted access');
 
 class Favorites extends DSC
 {
-	static $_version 		= '0.1.0';
-    static $_copyrightyear 	= '2012';
-    static $_min_php        = '5.2';
+	protected $_name = 'favorites';	
+	static $_version 		= '1.0';
+    static $_build          = 'r100';
+    static $_versiontype    = 'community';
+    static $_copyrightyear 	= '2011';
+    static $_min_php		= '5.2';
+
+    public $show_linkback = '1';
+    public $amigosid = '';
+    public $page_tooltip_dashboard_disabled = '0';
+    public $page_tooltip_config_disabled = '0';
+    public $page_tooltip_tools_disabled = '0';
+
+	/**
+	 * Returns the query
+	 * @return string The query to be used to retrieve the rows from the database
+	 */
+	function _buildQuery()
+	{
+		$query = "SELECT * FROM #__favorites_config";
+		return $query;
+	}
 
 	
-	/**
-	 * constructor
-	 * @return void
-	 */
-	function __construct() {
-		parent::__construct();
+	
 
-		$this->setVariables();
+	/**
+	 * Get component config
+	 *
+	 * @acces	public
+	 * @return	object
+	 */
+	public static function getInstance() {
+		static $instance;
+
+		if (!is_object($instance)) {
+			$instance = new Favorites();
+		}
+
+		return $instance;
 	}
 	
-	/**
-     * Get the copyright year
-     */
-    public static function getCopyrightYear()
-    {
-        return self::$_copyrightyear;
-    }
 	
 	 /**
      * Intelligently loads instances of classes in framework
@@ -65,64 +85,5 @@ class Favorites extends DSC
     {
         return parent::load( $classname, $filepath, $options  );
     }
-    
-    
-   
-   
-
-	/**
-	 * Returns the query
-	 * @return string The query to be used to retrieve the rows from the database
-	 */
-	function _buildQuery()
-	{
-		$query = "SELECT * FROM #__favorites_config";
-		return $query;
-	}
-
-	
-	/**
-	 * Set Variables
-	 *
-	 * @acces	public
-	 * @return	object
-	 */
-	function setVariables() {
-		$success = false;
-
-		if ( $data = $this->getData() )
-		{
-			for ($i=0; $i<count($data); $i++)
-			{
-				$title = $data[$i]->config_name;
-				$value = $data[$i]->value;
-				if (isset($title)) {
-					$this->$title = $value;
-				}
-			}
-
-			$success = true;
-		}
-
-		return $success;
-	}
-
-	/**
-	 * Get component config
-	 *
-	 * @acces	public
-	 * @return	object
-	 */
-	public static function getInstance() {
-		static $instance;
-
-		if (!is_object($instance)) {
-			$instance = new Favorites();
-		}
-
-		return $instance;
-	}
+ 	
 }
-    
-    
-    

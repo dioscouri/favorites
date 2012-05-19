@@ -17,6 +17,8 @@ class FavoritesModelItems extends FavoritesModelBase
 	protected function _buildQueryWhere(&$query)
     {
         $filter     = $this->getState('filter');
+		$filter_id_from = $this->getState('filter_id_from');
+        $filter_id_to   = $this->getState('filter_id_to');
        	$filter_name      = $this->getState('filter_name');
     	$filter_type    = $this->getState('filter_type');
     	$filter_userid     = $this->getState('filter_userid');
@@ -31,20 +33,43 @@ class FavoritesModelItems extends FavoritesModelBase
             $key    = $this->_db->Quote('%'.$this->_db->getEscaped( trim( strtolower( $filter ) ) ).'%');
             $where = array();
             $where[] = 'LOWER(tbl.name) LIKE '.$key;
-            $where[] = 'LOWER(tbl.type) LIKE '.$key;
+           
       
             $query->where('('.implode(' OR ', $where).')');
+        }
+		if ($filter_name) 
+        {
+            $key    = $this->_db->Quote('%'.$this->_db->getEscaped( trim( strtolower( $filter_name ) ) ).'%');
+            $where = array();
+            $where[] = 'LOWER(tbl.name) LIKE '.$key;
+          
+      
+            $query->where('('.implode(' OR ', $where).')');
+        }
+		
+		 if (strlen($filter_id_from))
+        {
+            if (strlen($filter_id_to))
+            {
+                $query->where('tbl.id >= '.(int) $filter_id_from);  
+            }
+                else
+            {
+                $query->where('tbl.id = '.(int) $filter_id_from);
+            }
+        }
+        
+        if (strlen($filter_id_to))
+        {
+            $query->where('tbl.id <= '.(int) $filter_id_to);
         }
         
     	if (strlen($filter_type))
     	{
     		$query->where("tbl.type = '".$filter_type."'");
     	}
-
-        if (strlen($filter_name))
-        {
-            $query->where("tbl.name = '".$filter_name."'");
-        }
+		
+      
     	
     	if (strlen($filter_userid))
     	{
@@ -114,18 +139,19 @@ class FavoritesModelItems extends FavoritesModelBase
 		return $items;
 	}
 	
-	
+	//admin style lists
 	public function getList()
 	{
 		
 		
 		$items = parent::getList(); 
-	
+		
 		foreach(@$items as $item)
 		{
 			$item->link = 'index.php?option=com_favorites&controller=items&view=items&task=edit&id='.$item->id;
-			
-			
+			// Geting the username for list views, should we store the username in the favs table to cut overhead or better to do this? this avoids problems is someone changes  their username
+			$user = JFactory::getUser($item->user_id);
+			$item->username = $user->get('username');
 		}
 		
 		return $items;

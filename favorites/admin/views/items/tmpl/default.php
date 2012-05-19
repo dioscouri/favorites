@@ -39,6 +39,9 @@
                 	<?php echo DSCGrid::sort( 'Fav Name', "tbl.name", @$state->direction, @$state->order ); ?>
                 </th>
                 <th style="width: 100px;">
+                	<?php echo DSCGrid::sort( 'User ID', "tbl.user_id", @$state->direction, @$state->order ); ?>
+                </th>
+                <th style="width: 100px;">
                 	<?php echo DSCGrid::sort( 'Type', "tbl.type", @$state->direction, @$state->order ); ?>
                 </th>
                 <th style="width: 100px;">
@@ -65,12 +68,16 @@
                     </div>
                 </th>
                 <th style="text-align: left;">
-                	<input id="filter_name" name="filter_name" value="<?php echo @$state->filter_name; ?>" size="15"/>
+                	<input id="filter_name" name="filter_name" value="<?php echo @$state->filter_name; ?>" size="75"/>
                     
                 </th>
                 <th>
-                	<input id="filter_type" name="filter_type" value="<?php echo @$state->filter_type; ?>" size="15"/>
-                    <?php // echo FavoritesSelect::type( @$state->filter_type, 'filter_type', $attribs, 'type', true, 'Type' ); ?>
+                	
+                    <?php echo FavoritesSelect::users( @$state->filter_userid, 'filter_userid', $attribs, 'user_id', true, 'User' ); ?>
+                </th>
+                <th>
+                	
+                    <?php echo FavoritesSelect::type( @$state->filter_type, 'filter_type', $attribs, 'type', true, 'Type' ); ?>
                 </th>
                 <th>
                    
@@ -116,6 +123,9 @@
 					<a href="<?php echo $item->link; ?>">
 						<?php echo $item->name; ?>
 					</a>
+				</td>
+				<td style="text-align: center;">
+					<?php echo $item->username; ?>
 				</td>
 				<td style="text-align: center;">
 					<?php echo $item->type; ?>
