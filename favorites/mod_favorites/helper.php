@@ -24,6 +24,21 @@ class modFavoritesHelper extends JObject
         $this->params = $params;
     }
 	
+	function showAddbutton($url, $name) {
+		
+		$db = &JFactory::getDBO();
+		$query = "select * from `#__favorites_items` where `name` = '{$name}' AND `url` = '{$url}'  limit 1";
+		$db -> setQuery($query);
+		$result = $db -> loadResult();
+
+		if ($result) {
+			return FALSE;
+		} else {
+			return TRUE ;
+		}
+	}
+	
+	
 	/**
      * 
      * Enter description here ...

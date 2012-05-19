@@ -50,6 +50,7 @@ class FavoritesModelItems extends FavoritesModelBase
     	{
     		
     	 $query->where("tbl.user_id = '".$filter_userid."'");
+	
 		}
 		
     	if (strlen($filter_datecreated))
@@ -67,7 +68,7 @@ class FavoritesModelItems extends FavoritesModelBase
         {
             $query->where("tbl.enabled = '".$filter_enabled."'");
         }
-	   
+	  
     }
 
 
@@ -105,6 +106,8 @@ class FavoritesModelItems extends FavoritesModelBase
 			$registry = new JRegistry;
 			$registry->loadString($item->params);
 			$item->attribs = $registry->toObject();
+			//Modal Link
+			$item->form_link = 'index.php?option=com_favorites&controller=items&view=items&layout=form&tmpl=component&id='.$item->id;
 			
 		}
 		
@@ -122,10 +125,13 @@ class FavoritesModelItems extends FavoritesModelBase
 		{
 			$item->link = 'index.php?option=com_favorites&controller=items&view=items&task=edit&id='.$item->id;
 			
+			
 		}
 		
 		return $items;
 	}
+	
+	
 	
 	
 }

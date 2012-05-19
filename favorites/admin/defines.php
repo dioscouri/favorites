@@ -36,70 +36,36 @@ class Favorites extends DSC
         return self::$_copyrightyear;
     }
 	
-	public static function load( $classname, $filepath, $options=array( 'site'=>'admin', 'type'=>'components', 'ext'=>'com_favorites' ), $force = false ) 
+	 /**
+     * Intelligently loads instances of classes in framework
+     *
+     * Usage: $object = Mediamanager::getClass( 'MediamanagerHelperCarts', 'helpers.carts' );
+     * Usage: $suffix = Mediamanager::getClass( 'MediamanagerHelperCarts', 'helpers.carts' )->getSuffix();
+     * Usage: $categories = Mediamanager::getClass( 'MediamanagerSelect', 'select' )->category( $selected );
+     *
+     * @param string $classname   The class name
+     * @param string $filepath    The filepath ( dot notation )
+     * @param array  $options
+     * @return object of requested class (if possible), else a new JObject
+     */
+    public static function getClass( $classname, $filepath='controller', $options=array( 'site'=>'admin', 'type'=>'components', 'ext'=>'com_favorites' )  )
     {
-        $classname = strtolower( $classname );
-    	if(version_compare(JVERSION,'1.6.0','ge')) {
-            // Joomla! 1.6+ code here
-            $classes = JLoader::getClassList();
-        } else {
-            // Joomla! 1.5 code here
-            $classes = JLoader::register();
-        }            
-
-        if ( ( class_exists($classname) || array_key_exists( $classname, $classes ) ) && !$force )  
-        {
-            return true;
-        }
-        
-        static $paths;
-
-        if (empty($paths)) 
-        {
-            $paths = array();
-        }
-        
-        if (empty($paths[$classname]) || !is_file($paths[$classname]))
-        {
-            // find the file and set the path
-            if (!empty($options['base']))
-            {
-                $base = $options['base'];
-            }
-                else
-            {
-                // recreate base from $options array
-                switch ($options['site'])
-                {
-                    case "site":
-                        $base = JPATH_SITE.DS;
-                        break;
-                    default:
-                        $base = JPATH_ADMINISTRATOR.DS;
-                        break;
-                }
-                
-                $base .= (!empty($options['type'])) ? $options['type'].DS : '';
-                $base .= (!empty($options['ext'])) ? $options['ext'].DS : '';
-            }
-            
-            $paths[$classname] = $base.str_replace( '.', DS, $filepath ).'.php';
-        }
-        
-        // if invalid path, return false
-        if (!is_file($paths[$classname]))
-        {
-            return false;
-        }
-        
-        // if not registered, register it
-        if ( !array_key_exists( $classname, $classes ) || $force ) 
-        {
-            JLoader::register( $classname, $paths[$classname] );
-            return true;
-        }
-        return false;
+        return parent::getClass( $classname, $filepath, $options  );
     }
+    
+    /**
+     * Method to intelligently load class files in the framework
+     *
+     * @param string $classname   The class name
+     * @param string $filepath    The filepath ( dot notation )
+     * @param array  $options
+     * @return boolean
+     */
+    public static function load( $classname, $filepath='controller', $options=array( 'site'=>'admin', 'type'=>'components', 'ext'=>'com_favorites' ) )
+    {
+        return parent::load( $classname, $filepath, $options  );
+    }
+    
     
    
    

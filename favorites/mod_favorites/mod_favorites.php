@@ -14,23 +14,32 @@ require_once( dirname(__FILE__).DS.'helper.php' );
 $helper = new modFavoritesHelper( $params ); 
 $items = $helper->getItems();
 
-$app =& JFactory::getApplication();
-$document =& JFactory::getDocument();
+$app = JFactory::getApplication();
+$uri = JFactory::getURI();
+$doc = JFactory::getDocument();
 
-/*JTable::addIncludePath( JPATH_ADMINISTRATOR . '/components/com_favorites/tables' );
-JModel::addIncludePath( JPATH_ADMINISTRATOR . '/components/com_favorites/models' );
-
-$model = JModel::getInstance( 'Items', 'FavoritesModel' );
-$table = JTable::getInstance( 'Items', 'FavoritesTable' );
-*/
-if (empty($items))
-{
-    require( JModuleHelper::getLayoutPath( 'mod_favorites', 'none' ) );
-} 
-    else
-{
-    require( JModuleHelper::getLayoutPath( 'mod_favorites', $params->get( 'layout', 'default' ) ) );
+$url = $uri->toString(); 
+$name = $doc->getTitle();
+$replace = $params->get('replace');
+if(!empty($replace)) {
+$name = str_replace($replace, '', $name);
 }
+
+$addButton = FALSE;
+if($params->get('showaddlink')) {
+$addButton =  $helper->showAddbutton($url, $name);
+}
+$removeButton = $params->get('showremovelinks');
+$user = JFactory::getUser(); 
+	
+
+if($user->id == '0') {
+	 require( JModuleHelper::getLayoutPath( 'mod_favorites', $params->get( 'layout', 'login' ) ) );
+} else {
+	 require( JModuleHelper::getLayoutPath( 'mod_favorites', $params->get( 'layout', 'default' ) ) );
+}
+
+
 
 
 ?>

@@ -1,6 +1,5 @@
 <?php
 /**
- * @version	0.1
  * @package	Favorites
  * @author 	Dioscouri Design
  * @link 	http://www.dioscouri.com
@@ -11,18 +10,9 @@
 /** ensure this file is being included by a parent file */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.controller');
+Favorites::load( 'FavoritesViewBase', "views._base", array( 'site'=>'site', 'type'=>'components', 'ext'=>'com_favorites' ) );
 
-class FavoritesController extends DSCControllerSite 
+class FavoritesViewDashboard extends FavoritesViewBase  
 {
-    /**
-    * default view
-    */
-    public $default_view = 'items';
-    
-	var $_models = array();
-	var $message = "";
-	var $messagetype = "";
-}
 
-?>
+}

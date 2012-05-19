@@ -1,6 +1,6 @@
 <?php
 /**
- * @version	0.1
+ * @version	1.5
  * @package	Favorites
  * @author 	Dioscouri Design
  * @link 	http://www.dioscouri.com
@@ -11,18 +11,7 @@
 /** ensure this file is being included by a parent file */
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.controller');
+Favorites::load( 'FavoritesModelItems', 'models.items' );
 
-class FavoritesController extends DSCControllerSite 
-{
-    /**
-    * default view
-    */
-    public $default_view = 'items';
-    
-	var $_models = array();
-	var $message = "";
-	var $messagetype = "";
-}
 
-?>
+	

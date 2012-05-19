@@ -75,7 +75,7 @@
 
 	<!-- Plugins -->
 	<plugins>
-		<!-- <plugin plugin="favorites_plugin_user" publish="false" group="user" element="favorites"/> -->
+		<!--<plugin plugin="favorites_favorites_url" publish="true" group="favorites" element="favorites_url"/> -->
 		<!-- <plugin plugin="favorites_plugin_com_content" group="favorites" element="com_content" /> -->
 		<!-- <plugin plugin="favorites_plugin_menu" group="system" element="menu" /> -->
 	</plugins>

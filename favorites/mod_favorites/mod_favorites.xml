@@ -27,6 +27,16 @@
 					<option
 						value="0">NO</option>
 				</field>
+				<field name="showremovelinks" type="list" default="" label="Add Remove Links" description="Add Remove Links next to the favorites in modules">
+					<option
+						value="1">Yes</option>
+					<option
+						value="0">NO</option>
+				</field>
+				<field name="replace" type="text" default="" label="Strip From Title" description="The Module uses the page title, so if your want to strip something like your site name out of the page title you can enter that here. " />
+					
+				
+				
 			</fieldset>
 			<fieldset name="advanced">
 				<field

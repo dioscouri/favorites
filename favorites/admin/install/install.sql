@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS `#__favorites_items` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`type` text NOT NULL,
 	`name` text NOT NULL,
+	`url` varchar(255) ,
 	`user_id` int NOT NULL,
 	`datecreated` datetime NOT NULL,
 	`lastmodified` datetime,
