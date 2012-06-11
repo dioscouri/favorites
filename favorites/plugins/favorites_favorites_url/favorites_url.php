@@ -22,7 +22,7 @@ class plgFavoritesFavorites_Url extends FavoritesPluginBase {
 	public $full_path = '';
 	public $relative_path = '';
 
-	function plgFavoritesFavorites_Url(&$subject, $config) {
+	function __construct(&$subject, $config) {
 		parent::__construct($subject, $config);
 		
 		// Get the application object.
@@ -44,7 +44,9 @@ class plgFavoritesFavorites_Url extends FavoritesPluginBase {
 
 		// real quick test to see if we already have this, here mostly to avoid double click double posting
 		$db = &JFactory::getDBO();
-		$query = "select * from `#__favorites_items` where `name` = '{$values['name']}' AND `url` = '{$values['url']}'  limit 1";
+		$user = JFactory::getUser();
+		if($user->id == 0) {return FALSE;}
+		$query = "select * from `#__favorites_items` where `name` = '{$values['name']}' AND `url` = '{$values['url']}' AND `user_id` = '{$user->id}'  limit 1";
 		$db -> setQuery($query);
 		$result = $db -> loadResult();
 

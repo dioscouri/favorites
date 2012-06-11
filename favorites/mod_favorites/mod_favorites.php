@@ -17,8 +17,14 @@ $items = $helper->getItems();
 $app = JFactory::getApplication();
 $uri = JFactory::getURI();
 $doc = JFactory::getDocument();
+if($params->get('showremovelinks')) {
+$url =  $uri->getPath();
+} else {
+$url = $uri->toString(); ; 
+	
+}
 
-$url = $uri->toString(); 
+
 $name = $doc->getTitle();
 $replace = $params->get('replace');
 if(!empty($replace)) {
@@ -34,7 +40,7 @@ $user = JFactory::getUser();
 	
 
 if($user->id == '0') {
-	 require( JModuleHelper::getLayoutPath( 'mod_favorites', $params->get( 'layout', 'login' ) ) );
+	 require( JModuleHelper::getLayoutPath( 'mod_favorites', 'login'  ) );
 } else {
 	 require( JModuleHelper::getLayoutPath( 'mod_favorites', $params->get( 'layout', 'default' ) ) );
 }

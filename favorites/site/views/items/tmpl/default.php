@@ -1,6 +1,6 @@
 <?php
 $items = $this->items;
-
+JHTML::_('behavior.modal');
 ?>
 <style>
 	span.edit {
@@ -49,24 +49,10 @@ No Favorites yet.
 	if( typeof (FavoritesUrl) === 'undefined') {
 		var FavoritesUrl = {};
 	}
-	FavoritesUrl.addNewFavorite = function(container, msg) {
-		var url = '/index.php?option=com_favorites&task=doTaskAjax&format=raw&view=items&element=favorites_url&elementTask=addNewFavorite';
-		Dsc.doTask(url, container, document.favForm, msg, true, Dsc.update());
-	}
 	FavoritesUrl.removeFavorite = function(container, msg, id) {
 		var url = '/index.php?option=com_favorites&task=doTaskAjax&format=raw&view=items&element=favorites_url&elementTask=removeFavorite';
 		Dsc.doTask(url, container, document.favForm, msg, false, Dsc.showHideDiv('fav' + id));
 	}
 </script>
-<form action="" method="post" class="favForm" name="favForm" id="favForm" enctype="multipart/form-data">
-	<input name="add_type" type="hidden" value="" id="add_type">
-	<input name="id" type="hidden" value="" id="id">
-	<input name="url" type="hidden" value="<?php echo $url; ?>" id="url">
-	<input name="name" type="hidden" value="<?php echo $name; ?>" id="name">
-	<?php if($addButton) :
-	?>
-	<input name="add_new_favorite" type="button" onclick="document.favForm.add_type.value='add_new_favorite'; FavoritesUrl.addNewFavorite( 'form_files', 'Adding Favorite' );" value="Add too Favorites">
-	<?php endif ?>
-</form>
 
 </div>

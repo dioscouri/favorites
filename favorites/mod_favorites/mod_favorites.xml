@@ -33,6 +33,12 @@
 					<option
 						value="0">NO</option>
 				</field>
+				<field name="relativeURLS" type="list" default="1" label="Use Relative URLS" description="If enabled, urls will be relative if disabled they will be full urls.">
+					<option
+						value="1">Yes</option>
+					<option
+						value="0">NO</option>
+				</field>
 				<field name="replace" type="text" default="" label="Strip From Title" description="The Module uses the page title, so if your want to strip something like your site name out of the page title you can enter that here. " />
 					
 				
