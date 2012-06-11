@@ -46,7 +46,7 @@ class plgFavoritesFavorites_Url extends FavoritesPluginBase {
 		$db = &JFactory::getDBO();
 		$user = JFactory::getUser();
 		if($user->id == 0) {return FALSE;}
-		$query = "select * from `#__favorites_items` where `name` = '{$values['name']}' AND `url` = '{$values['url']}' AND `user_id` = '{$user->id}'  limit 1";
+		$query = "select * from `#__favorites_items` where `type` = '{$values['type']}' `name` = '{$values['name']}' AND `url` = '{$values['url']}' AND `user_id` = '{$user->id}'  limit 1";
 		$db -> setQuery($query);
 		$result = $db -> loadResult();
 
@@ -56,10 +56,23 @@ class plgFavoritesFavorites_Url extends FavoritesPluginBase {
 		} else {
 			$newFavorite = JTable::getInstance('Items', 'FavoritesTable');
 			$newFavorite -> load();
-			$newFavorite -> type = 'url';
+			$newFavorite -> type = $values['type'];
 			$newFavorite -> name = $values['name'];
 			$newFavorite -> user_id = $user->id;
 			$newFavorite -> url = $values['url'];
+			//unset things that are not params, and store everything else
+			unset($values['name']);
+			unset($values['url']);
+			unset($values['type']);
+			unset($values['add_type']);
+			unset($values['add_new_favorite']);
+			unset($values['_checked']);
+			foreach ( $values as $name => $value ) {
+			$values[ (string) $name ] = (string) $value;
+			}
+			$insertParams = json_encode($values);
+			
+			$newFavorite -> params = $insertParams;
 			$newFavorite -> datecreated = $date -> toMySQL();
 			$newFavorite -> enabled = '1';
 			$newFavorite -> store();

@@ -44,6 +44,7 @@ ul.favoritesList li {padding-top:5px;}
 <form action="" method="post" class="favForm" name="favForm" id="favForm" enctype="multipart/form-data">
 <input name="add_type" type="hidden" value="" id="add_type">
 <input name="id" type="hidden" value="" id="id">
+<input name="type" type="hidden" value="url" id="type">
 <input name="url" type="hidden" value="<?php echo $url; ?>" id="url">
 <input name="name" type="hidden" value="<?php echo $name; ?>" id="name">
 <?php if($addButton) :?>
