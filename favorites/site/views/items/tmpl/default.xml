@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <metadata>
-	<layout title="FAVORITES DEFAULT LAYOUT">
+	<layout title="COM_FAVORITES_DEFAULT_LAYOUT">
 		<message>
-			<![CDATA[FAVORITES DEFAULT LAYOUT DESC]]>
+			<![CDATA[COM_FAVORITES_DEFAULT_LAYOUT_DESC]]>
 		</message>
 	</layout>
 	<state>
-    <name>FAVORITES DEFAULT LAYOUT</name>
-    <description>SFAVORITES DEFAULT LAYOUT DESC</description>
+    <name>COM_FAVORITES_DEFAULT_LAYOUT</name>
+    <description>COM_FAVORITES_DEFAULT_LAYOUT_DESC</description>
    
     <fields name="request">
 		<fieldset name="request" addfieldpath="/administrator/components/com_favorites/elements">

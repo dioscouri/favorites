@@ -13,4 +13,17 @@
 	<files>
 		<filename plugin="favorites_content">favorites_content.php</filename>
 	</files>
+	
+		<config>
+		<fields name="params">
+			<fieldset name="basic" addfieldpath="/administrator/components/com_favorites/elements/">
+				<field name="showaddlink" type="list" default="1" label="Add Link Button" description="If set to yes, there will be an add to favorites button on your content page, disable to include the favorites link manually in your template over ride.">
+					<option
+						value="1">JYES</option>
+					<option
+						value="0">JNO</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
 </install>
