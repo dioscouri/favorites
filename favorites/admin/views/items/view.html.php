@@ -9,7 +9,8 @@
 /** ensure this file is being included by a parent file */
 defined('_JEXEC') or die('Restricted access');
 
-JLoader::import( 'com_favorites.views._base', JPATH_ADMINISTRATOR.DS.'components' );
+
+Favorites::load('FavoritesViewBase','views.base');
 
 class FavoritesViewItems extends FavoritesViewBase 
 {
