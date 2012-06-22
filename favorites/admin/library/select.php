@@ -18,23 +18,20 @@ class FavoritesSelect extends DSCSelect
      */
     public static function type( $selected, $name = 'filter_type', $attribs = array('class' => 'inputbox', 'size' => '1'), $idtag = null, $allowAny = false, $title='Select Type', $allowNone = false, $title_none = 'No Type' )
     {
-      //  $list = array();
-      //  if ($allowAny) {
-      //      $list[] =  self::option('', "- ".JText::_( $title )." -" );
-      //  }
+        $list = array();
+        if ($allowAny) {
+            $list[] =  self::option('', "- ".JText::_( $title )." -" );
+       }
 
-       // if ($allowNone) 
-       // {
-       //     $list[] =  self::option( '0', "- ".JText::_( $title_none )." -" );
-       // }
-        // make this based on a table or some kind of plugin system
-		$items = array();
-        $items['url'] = 'URL';
-		//$items['content'] = 'Content Item';
-        ////$items['tienda'] = 'Product';
-        foreach ($items as $key => $value)
+		
+		$db = JFactory::getDbo();
+		$query = "SELECT DISTINCT #__favorites_items.type  FROM #__favorites_items";
+		$db -> setQuery($query);
+		$types = $db -> loadObjectList();
+		
+        foreach ($types as $type)
         {
-            $list[] = JHTML::_('select.option', $key, $value );
+            $list[] = JHTML::_('select.option', strtolower($type->type), $type->type );
         }
         
         return self::genericlist($list, $name, $attribs, 'value', 'text', $selected, $idtag );
@@ -62,8 +59,6 @@ class FavoritesSelect extends DSCSelect
 		$users = $db -> loadObjectList();
 		
 		
-		//$items['content'] = 'Content Item';
-        ////$items['tienda'] = 'Product';
         foreach ($users as $user)
         {
             $list[] = JHTML::_('select.option', $user->user_id, $user->username );

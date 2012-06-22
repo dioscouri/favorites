@@ -27,6 +27,7 @@ class plgContentFavorites_Content extends FavoritesPluginBase {
 	public $relative_path = '';
 	public $url = '';
 	public $showaddlink = '';
+	var $function = 'onContentBeforeDisplay';
 
 	function __construct(&$subject, $config) {
 		parent::__construct($subject, $config);
@@ -44,12 +45,37 @@ class plgContentFavorites_Content extends FavoritesPluginBase {
 			JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_favorites/tables');
 			JModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_favorites/models');
 		}
+
+		$this -> function = 'onContentBeforeDisplay';
+
+		$doc = JFactory::getDocument();
+
+		$js = "
+		
+		if( typeof (FavoritesContent) === 'undefined') {
+		var FavoritesContent = {};
+	}
+
+	FavoritesContent.addNewFavorite = function(container, msg) {
+		var url = '/index.php?option=com_favorites&task=doTaskAjax&format=raw&view=items&element=favorites_content&elementTask=addNewFavorite';
+		Dsc.doTask(url, container, document.favFormContent, msg, true);
+		Dsc.update()
+	}
+	FavoritesContent.removeFavorite = function(container, msg, id) {
+		var url = '/index.php?option=com_favorites&task=doTaskAjax&format=raw&view=items&element=favorites_content&elementTask=removeFavorite';
+		Dsc.doTask(url, container, document.favFormContent, msg, false, Dsc.showHideDiv('fav' + id));
+	}
+		
+		
+		";
+		$doc -> addScriptDeclaration($js);
 	}
 
 	function showAddbutton($url, $name) {
 
 		$db = JFactory::getDBO();
 		$user = JFactory::getUser();
+
 		if ($user -> id == 0) {
 			return FALSE;
 		}
@@ -65,32 +91,24 @@ class plgContentFavorites_Content extends FavoritesPluginBase {
 		}
 	}
 
-	public function onContentBeforeDisplay($context, &$row, &$params, $page = 0) {
+	function addButton() {
+		$html = '';
+		$html .= '<button class="FavoritesContent" onclick="document.favFormContent.add_type.value=\'add_new_favorite\'; FavoritesContent.addNewFavorite( \'form_files\', \'Adding Favorite\' );" value="Add too Favorites">Add To Favorites</button>';
+		return $html;
+
+	}
+
+	function onContentAfterDisplay($context, &$row, &$params, $page = 0) {
+		$app = JFactory::getApplication();
+
+		if ($app -> isAdmin()) {
+			return true;
+		}
+
 		$show = $this -> showAddbutton($this -> url, $row -> title);
 
 		$html = '';
 		$uri = JFactory::getURI();
-		$doc = JFactory::getDocument();
-
-		$js = "
-		
-		if( typeof (FavoritesContent) === 'undefined') {
-		var FavoritesContent = {};
-	}
-
-	FavoritesContent.addNewFavorite = function(container, msg) {
-		var url = '/index.php?option=com_favorites&task=doTaskAjax&format=raw&view=items&element=favorites_content&elementTask=addNewFavorite';
-		Dsc.doTask(url, container, document.favFormContent, msg, true, Dsc.update());
-	}
-	FavoritesContent.removeFavorite = function(container, msg, id) {
-		var url = '/index.php?option=com_favorites&task=doTaskAjax&format=raw&view=items&element=favorites_content&elementTask=removeFavorite';
-		Dsc.doTask(url, container, document.favFormContent, msg, false, Dsc.showHideDiv('fav' + id));
-	}
-		
-		
-		";
-		$doc -> addScriptDeclaration($js);
-
 		$html .= '<form action="" method="post" class="favFormContent" name="favFormContent" id="favFormContent" enctype="multipart/form-data">';
 		$html .= '<input name="add_type" type="hidden" value="" id="add_type">';
 		$html .= '<input name="id" type="hidden" value="" id="id">';
@@ -102,13 +120,12 @@ class plgContentFavorites_Content extends FavoritesPluginBase {
 		} else {
 			$row -> showfavicon = 1;
 			if ($this -> showaddlink == 1) {
-				$html .= '<input name="add_new_favorite" type="button" onclick="document.favFormContent.add_type.value=\'add_new_favorite\'; FavoritesContent.addNewFavorite( \'form_files\', \'Adding Favorite\' );" value="Add too Favorites">';
+				$html .= $this -> addButton();
 			}
 		}
 		$html .= '</form>';
 
 		return $html;
-
 	}
 
 }
