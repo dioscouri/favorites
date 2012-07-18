@@ -24,9 +24,9 @@
 		<td style="text-align: center; width: 33%;">
 			<?php echo JText::_( "Favorites" ); ?>: <?php echo JText::_( "Favorites_Desc" ); ?>
 			<br/>
-			<?php echo JText::_( "Copyright" ); ?>: <?php echo Favorites::getCopyrightYear(); ?> &copy; <a href="<?php echo $url; ?>" target="_blank">Dioscouri Design</a>
+			<?php echo JText::_( "Copyright" ); ?>: <?php echo Favorites::getInstance()->getCopyrightYear(); ?> &copy; <a href="<?php echo $url; ?>" target="_blank">Dioscouri Design</a>
 			<br/>
-			<?php echo JText::_( "Version" ); ?>: <?php echo Favorites::getVersion(); ?>
+			<?php echo JText::_( "Version" ); ?>: <?php echo Favorites::getInstance()->getVersion(); ?>
 		</td>
 		<td style="text-align: right; width: 33%;">
 			<a href="<?php echo $url; ?>" target="_blank"><img src="<?php echo $img_path."/".$img_file;?>"></img></a>

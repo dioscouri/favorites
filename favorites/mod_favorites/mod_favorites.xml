@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <install type="module" client="site" version="2.5.0" method="upgrade">
-	<name>Mod Favorites</name>
+	<name>Favorites</name>
 	<author>Dioscouri</author>
     <authorEmail>info@dioscouri.com</authorEmail>
     <authorUrl>http://www.dioscouri.com</authorUrl>
@@ -19,7 +19,7 @@
 	</files>
 	<config>
 		<fields name="params">
-			<fieldset name="basic" addfieldpath="/administrator/components/com_favorites/elements/">
+			<fieldset name="basic">
 				
 				<field name="showaddlink" type="list" default="" label="Add Link Button" description="This is a default all link button, it only works with the URL type">
 					<option

@@ -10,7 +10,7 @@
 /** ensure this file is being included by a parent file */
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-JLoader::import( 'com_favorites.tables._base', JPATH_ADMINISTRATOR.DS.'components' );
+Favorites::load('FavoritesTable','tables.base');
 
 class FavoritesTableConfig extends FavoritesTable 
 {

@@ -77,7 +77,7 @@
 	 <plugins>
         <!-- Instructions: plugin="package_folder_containing_plugin_files" element="plugin_filename" -->
         <plugin plugin="plugins/favorites_favorites_url" publish="true" group="favorites" element="favorites_url" />
-        <plugin plugin="plugins/favorites_favorites_content" publish="true" group="content" element="favorites_content" />
+        <!--<plugin plugin="plugins/favorites_favorites_content" publish="true" group="content" element="favorites_content" /> -->
     </plugins>
 	
 </install>

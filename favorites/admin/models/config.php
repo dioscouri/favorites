@@ -9,7 +9,7 @@
 /** ensure this file is being included by a parent file */
 defined('_JEXEC') or die('Restricted access');
 
-JLoader::import( 'com_favorites.models._base', JPATH_ADMINISTRATOR.DS.'components' );
+Favorites::load('FavoritesModelBase','models.base');
 
 class FavoritesModelConfig extends FavoritesModelBase 
 {

@@ -14,11 +14,11 @@ defined('_JEXEC') or die('Restricted access');
 class Favorites extends DSC
 {
 	protected $_name = 'favorites';	
-	static $_version 		= '1.0';
-    static $_build          = 'r100';
-    static $_versiontype    = 'community';
-    static $_copyrightyear 	= '2011';
-    static $_min_php		= '5.2';
+	protected $_version 		= '1.0';
+    protected $_build          = 'r100';
+    protected $_versiontype    = 'community';
+    protected $_copyrightyear 	= '2012';
+    protected $_min_php		= '5.3';
 
     public $show_linkback = '1';
     public $amigosid = '';

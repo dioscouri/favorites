@@ -11,32 +11,10 @@
 /** ensure this file is being included by a parent file */
 defined('_JEXEC') or die('Restricted access');
 
-Favorites::load( 'FavoritesViewBase', 'views._base', array( 'site'=>'site', 'type'=>'components', 'ext'=>'com_favorites' ) );
+Favorites::load( 'FavoritesViewBase', 'views.base', array( 'site'=>'site', 'type'=>'components', 'ext'=>'com_favorites' ) );
 
 class FavoritesViewItems extends FavoritesViewBase 
 {
 	
-
-	
-	function getLayoutVars($tpl=null) 
-    {
-        $layout = $this->getLayout();
-		
-        switch(strtolower($layout))
-        {
-            case "form":
-                JRequest::setVar('hidemainmenu', '1');
-                $this->_form($tpl);
-              break;
-            case "view":
-                $this->_form($tpl);
-                break;
-            case "default":
-            default:
-             
-                $this->_default($tpl);
-              break;
-        }
-    }
 	
 }

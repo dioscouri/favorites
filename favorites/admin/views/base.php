@@ -20,14 +20,6 @@ class FavoritesViewBase extends DSCViewAdmin
 	function display($tpl=null)
 	{
         
-        Favorites::load( 'DSCGrid', 'library.grid' );
-		 Favorites::load( 'FavoritesSelect', 'library.select' );
-		/*
-        Favorites::load( 'FavoritesMenu', 'library.menu' );
-        Favorites::load( 'FavoritesUrl', 'library.url' );
-       
-		*/
-		
 		
 		parent::display($tpl);
 	}

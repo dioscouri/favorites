@@ -24,26 +24,6 @@ class FavoritesViewItems extends FavoritesViewBase
 		parent::_defaultToolbar();
 	}
 	
-	function getLayoutVars($tpl=null) 
-    {
-        $layout = $this->getLayout();
-
-        switch(strtolower($layout))
-        {
-            case "form":
-                JRequest::setVar('hidemainmenu', '1');
-                $this->_form($tpl);
-              break;
-            case "view":
-                $this->_form($tpl);
-                break;
-            case "default":
-            default:
-             
-                $this->_default($tpl);
-              break;
-        }
-    }
 	
 }
 	

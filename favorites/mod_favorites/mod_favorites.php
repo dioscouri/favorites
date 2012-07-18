@@ -17,6 +17,8 @@ $items = $helper->getItems();
 $app = JFactory::getApplication();
 $uri = JFactory::getURI();
 $doc = JFactory::getDocument();
+
+/* this is if want the user to be able to remove their links*/
 if($params->get('showremovelinks')) {
 $url =  $uri->getPath();
 } else {
@@ -24,13 +26,14 @@ $url = $uri->toString(); ;
 	
 }
 
-
+/* The module stores by default the title of page, this allows the  developer of the site to remove a string from the title, like - domain.org*/
 $name = $doc->getTitle();
 $replace = $params->get('replace');
 if(!empty($replace)) {
 $name = str_replace($replace, '', $name);
 }
 
+/* If the module is set to show the add button, run the check to see if the page is already added for this user if not use the add button.*/
 $addButton = FALSE;
 if($params->get('showaddlink')) {
 $addButton =  $helper->showAddbutton($url, $name);

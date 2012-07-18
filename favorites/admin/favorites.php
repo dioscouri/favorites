@@ -42,10 +42,10 @@ $doc->addScriptDeclaration($js);
 JHTML::_('stylesheet', 'admin.css', 'media/com_favorites/css/');
 
 $parentPath = JPATH_ADMINISTRATOR . '/components/com_favorites/helpers';
-DSCLoader::discover('MediamanagerHelper', $parentPath, true);
+DSCLoader::discover('FavoritesHelper', $parentPath, true);
 
 $parentPath = JPATH_ADMINISTRATOR . '/components/com_favorites/library';
-DSCLoader::discover('Mediamanager', $parentPath, true);
+DSCLoader::discover('Favorites', $parentPath, true);
 
 // load the plugins
 JPluginHelper::importPlugin( 'favorites' );
