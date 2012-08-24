@@ -21,13 +21,12 @@ class FavoritesModelItems extends FavoritesModelBase
 		$filter_id_from = $this->getState('filter_id_from');
         $filter_id_to   = $this->getState('filter_id_to');
        	$filter_name      = $this->getState('filter_name');
+		$filter_url    = $this->getState('filter_url');
     	$filter_type    = $this->getState('filter_type');
     	$filter_userid     = $this->getState('filter_userid');
     	$filter_datecreated     = $this->getState('filter_datecreated ');
     	$filter_lastmodified    = $this->getState('filter_lastmodified');
 		$filter_enabled    = $this->getState('filter_enabled');
-		
-    	      
 		
         if ($filter) 
         {
@@ -69,7 +68,12 @@ class FavoritesModelItems extends FavoritesModelBase
     	{
     		$query->where("tbl.type = '".$filter_type."'");
     	}
-		
+		 if ($filter_url) 
+        {
+            $key    = $this->_db->Quote('%'.$this->_db->getEscaped( trim( strtolower( $filter_url ) ) ).'%');
+            
+           $query->where("tbl.url  LIKE ".$key);
+        }
       
     	
     	if (strlen($filter_userid))
@@ -97,13 +101,11 @@ class FavoritesModelItems extends FavoritesModelBase
 	  
     }
 
-
-	function getTable()
-	{
-		JTable::addIncludePath( JPATH_ADMINISTRATOR.DS.'components'.DS.'com_favorites'.DS.'tables' );
-		$table = JTable::getInstance( 'Items', 'FavoritesTable' );
-		return $table;
-	}
+	 protected function _buildQueryGroup(&$query)
+    {
+    //	$query->group( 'tbl.type' );
+    }
+	
 	
 	public function getItem($pk = null)
 	{
@@ -134,18 +136,23 @@ class FavoritesModelItems extends FavoritesModelBase
 			$item->attribs = $registry->toObject();
 			//Modal Link
 			$item->form_link = 'index.php?option=com_favorites&controller=items&view=items&layout=form&tmpl=component&id='.$item->id;
-			
+			if($item->scope_id) {
+				JTable::addIncludePath(JPATH_ADMINISTRATOR.'/components/com_tags/tables');
+				$scopeTable = DSCTable::getInstance('Scopes','TagsTable');
+				$scopeTable->load($item->scope_id);
+				$item->type = $scopeTable->scope_name;
+			}
 		}
 		
 		return $items;
 	}
 	
 	//admin style lists
-	public function getList()
+	public function getList($refresh = false)
 	{
 		
 		
-		$items = parent::getList(); 
+		$items = parent::getList($refresh); 
 		
 		foreach(@$items as $item)
 		{
@@ -154,12 +161,67 @@ class FavoritesModelItems extends FavoritesModelBase
 			// Geting the username for list views, should we store the username in the favs table to cut overhead or better to do this? this avoids problems is someone changes  their username
 			$user = JFactory::getUser($item->user_id);
 			$item->username = $user->get('username');
+			if($item->scope_id) {
+				
+			JTable::addIncludePath(JPATH_ADMINISTRATOR.'/components/com_tags/tables');
+				$scopeTable = DSCTable::getInstance('Scopes','TagsTable');
+				$scopeTable->load($item->scope_id);
+				$item->type = $scopeTable->scope_name;
+			}
+		}
+		
+		return $items;
+	}
+	
+	//admin style lists
+	public function getCatList($refresh = false)
+	{
+		
+		$items = parent::getList($refresh); 
+		
+		
+		$list = new stdClass;
+		foreach(@$items as $item)
+		{
+			
+			$item->link = 'index.php?option=com_favorites&controller=items&view=items&task=edit&id='.$item->id;
+			$item->edit_link = 'index.php?option=com_favorites&task=edit&tmpl=component&layout=form&id='.$item->id;
+			// Geting the username for list views, should we store the username in the favs table to cut overhead or better to do this? this avoids problems is someone changes  their username
+			$user = JFactory::getUser($item->user_id);
+			$item->username = $user->get('username');
+			if($item->scope_id) {
+				
+			JTable::addIncludePath(JPATH_ADMINISTRATOR.'/components/com_tags/tables');
+				$scopeTable = DSCTable::getInstance('Scopes','TagsTable');
+				$scopeTable->load($item->scope_id);
+				$item->type = $scopeTable->scope_name;
+			}
 		}
 		
 		return $items;
 	}
 	
 	
+	
+	/*This is  just a wrapper for setting states and calling getItem, so you can  say for a list view  load this modal and  just $modal->checkItem($pk); and get a yes no to show the  add box.*/
+	public function checkItem( $pk = NULL, $url = NULL, $name = NULL, $id = NULL, $type = NULL, $user_id = NULL  ) {
+		
+		
+		$this->setState('filter_id_from', $id);
+		$this->setState('filter_url', $url);
+		$this->setState('filter_name', $name);
+		$this->setState('filter_type', $type );
+		if(!$user_id) {$user_id = $user_id = JFactory::getUser()->id; }
+		$this->setState('$user_id', $user_id);
+	
+		$item = parent::getItem($pk); 
+		if($item) {
+			return TRUE;
+		} else {
+			return FALSE; 
+		}
+	
+	}
 	
 	
 }

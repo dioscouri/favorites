@@ -15,10 +15,8 @@ Favorites::load('FavoritesModelBase','models.base');
 
 class FavoritesModelDashboard extends FavoritesModelBase 
 {
-	function getTable()
-	{
-		JTable::addIncludePath( JPATH_ADMINISTRATOR.DS.'components'.DS.'com_favorites'.DS.'tables' );
-		$table = JTable::getInstance( 'Config', 'FavoritesTable' );
-		return $table;
-	}
+	public function getTable($name='Config', $prefix='FavoritesTable', $options = array())
+    {
+        return parent::getTable($name, $prefix, $options);
+    }
 }

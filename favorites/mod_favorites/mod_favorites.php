@@ -41,7 +41,6 @@ $addButton =  $helper->showAddbutton($url, $name);
 $removeButton = $params->get('showremovelinks');
 $user = JFactory::getUser(); 
 	
-
 if($user->id == '0') {
 	 require( JModuleHelper::getLayoutPath( 'mod_favorites', 'login'  ) );
 } else {

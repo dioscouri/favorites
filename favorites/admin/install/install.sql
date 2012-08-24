@@ -14,6 +14,8 @@ CREATE TABLE IF NOT EXISTS `#__favorites_items` (
 	`type` text NOT NULL,
 	`name` text NOT NULL,
 	`url` varchar(255) ,
+	`object_id` int ,
+	`scope_id` int,
 	`user_id` int NOT NULL,
 	`datecreated` datetime NOT NULL,
 	`lastmodified` datetime,
