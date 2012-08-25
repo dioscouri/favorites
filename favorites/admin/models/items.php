@@ -22,7 +22,7 @@ class FavoritesModelItems extends FavoritesModelBase
         $filter_id_to   = $this->getState('filter_id_to');
        	$filter_name      = $this->getState('filter_name');
 		$filter_url    = $this->getState('filter_url');
-    	$filter_type    = $this->getState('filter_type');
+    	$filter_scope    = $this->getState('filter_scope');
     	$filter_userid     = $this->getState('filter_userid');
     	$filter_datecreated     = $this->getState('filter_datecreated ');
     	$filter_lastmodified    = $this->getState('filter_lastmodified');
@@ -64,9 +64,9 @@ class FavoritesModelItems extends FavoritesModelBase
             $query->where('tbl.id <= '.(int) $filter_id_to);
         }
         
-    	if (strlen($filter_type))
+    	if (strlen($filter_scope))
     	{
-    		$query->where("tbl.type = '".$filter_type."'");
+    		$query->where("tbl.scope_id = '".$filter_scope."'");
     	}
 		 if ($filter_url) 
         {
@@ -98,14 +98,39 @@ class FavoritesModelItems extends FavoritesModelBase
         {
             $query->where("tbl.enabled = '".$filter_enabled."'");
         }
-	  
+	 
     }
 
 	 protected function _buildQueryGroup(&$query)
     {
-    //	$query->group( 'tbl.type' );
+    	//$query->group( 'tbl.scope_id' );
     }
+
+	/**
+     * Builds JOINS clauses for the query
+     */
+    protected function _buildQueryJoins(&$query)
+    {
+    $query -> join('LEFT', '#__favorites_scopes AS scope ON tbl.scope_id = scope.scope_id');	
+		
+    }
+	/**
+	 * Builds SELECT fields list for the query
+	 */
+	protected function _buildQueryFields(&$query)
+	{
+		$fields = array();
+		$fields[] = " scope.* ";
+		
 	
+	//	 $fields[] = " MAX(review.lastVisited)  ";
+        
+		
+		$query -> select($fields);
+		// if you move this up above the fields than the building addresses override the school address
+		$query -> select($this -> getState('select', 'tbl.*'));
+		
+	}
 	
 	public function getItem($pk = null)
 	{
@@ -115,7 +140,6 @@ class FavoritesModelItems extends FavoritesModelBase
 			$registry->loadString($item->params);
 			$item->attribs = $registry->toObject();
 
-			
 		}
 
 		return $item;
@@ -126,7 +150,6 @@ class FavoritesModelItems extends FavoritesModelBase
 	public function getItems()
 	{
 		
-		
 		$items = parent::getList(); 
 	
 		foreach(@$items as $item)
@@ -136,12 +159,6 @@ class FavoritesModelItems extends FavoritesModelBase
 			$item->attribs = $registry->toObject();
 			//Modal Link
 			$item->form_link = 'index.php?option=com_favorites&controller=items&view=items&layout=form&tmpl=component&id='.$item->id;
-			if($item->scope_id) {
-				JTable::addIncludePath(JPATH_ADMINISTRATOR.'/components/com_tags/tables');
-				$scopeTable = DSCTable::getInstance('Scopes','TagsTable');
-				$scopeTable->load($item->scope_id);
-				$item->type = $scopeTable->scope_name;
-			}
 		}
 		
 		return $items;
@@ -161,56 +178,23 @@ class FavoritesModelItems extends FavoritesModelBase
 			// Geting the username for list views, should we store the username in the favs table to cut overhead or better to do this? this avoids problems is someone changes  their username
 			$user = JFactory::getUser($item->user_id);
 			$item->username = $user->get('username');
-			if($item->scope_id) {
-				
-			JTable::addIncludePath(JPATH_ADMINISTRATOR.'/components/com_tags/tables');
-				$scopeTable = DSCTable::getInstance('Scopes','TagsTable');
-				$scopeTable->load($item->scope_id);
-				$item->type = $scopeTable->scope_name;
-			}
+			
 		}
 		
 		return $items;
 	}
 	
-	//admin style lists
-	public function getCatList($refresh = false)
-	{
-		
-		$items = parent::getList($refresh); 
-		
-		
-		$list = new stdClass;
-		foreach(@$items as $item)
-		{
-			
-			$item->link = 'index.php?option=com_favorites&controller=items&view=items&task=edit&id='.$item->id;
-			$item->edit_link = 'index.php?option=com_favorites&task=edit&tmpl=component&layout=form&id='.$item->id;
-			// Geting the username for list views, should we store the username in the favs table to cut overhead or better to do this? this avoids problems is someone changes  their username
-			$user = JFactory::getUser($item->user_id);
-			$item->username = $user->get('username');
-			if($item->scope_id) {
-				
-			JTable::addIncludePath(JPATH_ADMINISTRATOR.'/components/com_tags/tables');
-				$scopeTable = DSCTable::getInstance('Scopes','TagsTable');
-				$scopeTable->load($item->scope_id);
-				$item->type = $scopeTable->scope_name;
-			}
-		}
-		
-		return $items;
-	}
+	
 	
 	
 	
 	/*This is  just a wrapper for setting states and calling getItem, so you can  say for a list view  load this modal and  just $modal->checkItem($pk); and get a yes no to show the  add box.*/
-	public function checkItem( $pk = NULL, $url = NULL, $name = NULL, $id = NULL, $type = NULL, $user_id = NULL  ) {
-		
+	public function checkItem( $pk = NULL, $url = NULL, $name = NULL, $id = NULL, $scope_id = NULL, $user_id = NULL  ) {
 		
 		$this->setState('filter_id_from', $id);
 		$this->setState('filter_url', $url);
 		$this->setState('filter_name', $name);
-		$this->setState('filter_type', $type );
+		$this->setState('filter_scope', $scope_id );
 		if(!$user_id) {$user_id = $user_id = JFactory::getUser()->id; }
 		$this->setState('$user_id', $user_id);
 	

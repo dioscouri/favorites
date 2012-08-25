@@ -39,11 +39,11 @@
 				</td>
 			</tr>
 			<tr>
-				<td class="key"> <?php echo JText::_('Type'); ?>: </td>
+				<td class="key"> <?php echo JText::_('Scope'); ?>: </td>
 				<td>
 					<?php $attribs = array('class' => 'inputbox', 'size' => '1'); ?>
-               	<?php echo FavoritesSelect::type( @$row -> type, 'type', $attribs, 'type', true, 'select type', false ); ?>
-	            
+            
+	             <?php echo FavoritesSelect::scope( @$row -> scope_id, 'scope_id', $attribs, 'scope', true, 'Scope' ); ?>
 				</td>
 			</tr>
 

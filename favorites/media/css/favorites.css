@@ -1,12 +1,5 @@
-#Favorites span.edit {
-		float: right;
-	}
-#Favorites	span.delete {
-		float: right;
-	}
-#Favorites	span.edit, #Favorites a.remove:hover {
-		background: none;
-	}
-#Favorites	ul.favoritesList li {
-		padding-top: 5px;
-	}
+span.edit {
+	float:right;
+}
+span.edit a.remove:hover {background:none; }
+ul.favoritesList li {padding-top:5px;}	

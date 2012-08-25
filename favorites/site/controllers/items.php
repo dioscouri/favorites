@@ -9,16 +9,20 @@
  */
 
 /** ensure this file is being included by a parent file */
-defined('_JEXEC') or die('Restricted access');
+defined( '_JEXEC' ) or die( 'Restricted access' );
 
-class FavoritesControllerItems extends FavoritesController {
+class FavoritesControllerItems extends FavoritesController
+{
 	/**
 	 * constructor
 	 */
-	function __construct() {
+	function __construct()
+	{
 		parent::__construct();
-		$this -> set('suffix', 'items');
 
+		$this->set('suffix', 'items');
+		
+		
 	}
 
 	/**
@@ -26,71 +30,84 @@ class FavoritesControllerItems extends FavoritesController {
 	 *
 	 * @return array()
 	 */
-	function _setModelState($model_name = '') {
+	function _setModelState( $model_name='' )
+	{
 		$state = parent::_setModelState();
 		$app = JFactory::getApplication();
-		if (empty($model_name)) { $model_name = $this -> get('suffix');
-		}
-		$model = $this -> getModel($model_name);
-		$ns = $this -> getNamespace();
-		$user = JFactory::getUser();
-		$user_id = $user -> id;
-
-		if (!empty($user_id)) {
-			// use it
-			$model -> setState('filter_userid', $user_id);
-		} else {
-			//GUEST
-			// redirect to login probably
-		}
-
-		$state['filter_enabled'] = 1;
-
-		foreach (@$state as $key => $value) {
-			$model -> setState($key, $value);
+		if (empty($model_name)) { $model_name = $this->get('suffix'); } 
+		$model = $this->getModel( $model_name );
+		$ns = $this->getNamespace();
+		 $user = JFactory::getUser(); 
+		$user_id = $user->id;
+	
+        if (!empty($user_id))
+        {
+           // use it
+            $model->setState( 'filter_userid', $user_id);           
+        } else {
+        	//GUEST
+        	// redirect to login probably
+        }
+		
+		$state['filter_enabled']  = 1;      
+        
+		foreach (@$state as $key=>$value)
+		{
+			$model->setState( $key, $value );
 		}
 
 		return $state;
+	
+	}
+	
+	function display($cachable=false, $urlparams = false)
+	{
+        $view = $this->getView( 'items', 'html' );
+		$view->set( '_doTask', true );
+		$view->set( 'hidemenu', true );      
 
+        JModel::addIncludePath( JPATH_ADMINISTRATOR.DS.'components'.DS.'com_favorites'.DS.'models' );
+	    $model = JModel::getInstance( 'Items', 'FavoritesModel' );
+        
+		
+        $user = JFactory::getUser(); 
+		$user_id = $user->id;
+		
+        if (!empty($user_id))
+        {
+            // use it
+            $model->setState( 'filter_userid', $user_id);           
+        } else {
+        	// redirect to login probably
+        }
+        
+        
+        $app = JFactory::getApplication();
+        $ns = $app->getName().'::'.'com.favorites.model.'.$model->getTable()->get('_suffix');
+
+        $state = array();
+		
+	    foreach (@$state as $key=>$value)
+        {
+            $model->setState( $key, $value );
+        }
+  
+		$params		= $app->getParams();
+        $list = $model->getList();
+		
+	    $view->assign( 'items', $list );
+		$view->assign( 'params', $params );
+        $view->setModel( $model );
+        
+        parent::display($cachable, $urlparams);
 	}
 
-	function display($cachable = false, $urlparams = false) {
-		$view = $this -> getView('items', 'html');
-		$view -> set('_doTask', true);
-		$view -> set('hidemenu', true);
-
-		JModel::addIncludePath(JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_favorites' . DS . 'models');
-		$model = JModel::getInstance('Items', 'FavoritesModel');
-
-		$user = JFactory::getUser();
-		$user_id = $user -> id;
-
-		if (!empty($user_id)) {
-			// use it
-			$model -> setState('filter_userid', $user_id);
-		} else {
-			// redirect to login probably
-		}
-
-		$app = JFactory::getApplication();
-		$ns = $app -> getName() . '::' . 'com.favorites.model.' . $model -> getTable() -> get('_suffix');
-
-		$state = array();
-
-		foreach (@$state as $key => $value) {
-			$model -> setState($key, $value);
-		}
-
-		$params = $app -> getParams();
-		$list = $model -> getList();
-
-		$view -> assign('items', $list);
-		$view -> assign('params', $params);
-		$view -> setModel($model);
-
-		parent::display($cachable, $urlparams);
-	}
-
+	function grab_dump($var)
+{
+    ob_start();
+    var_dump($var);
+    return ob_get_clean();
+}
 	public function addFavorite() {
 		$date = new JDate();
 		$user = JFactory::getUser();
@@ -104,11 +121,11 @@ class FavoritesControllerItems extends FavoritesController {
 		if ($user -> id == 0) {
 			return FALSE;
 		}
+		
+		$model = DSCModel::getInstance('Items','FavoritesModel');
 
-		$model = DSCModel::getInstance('Items', 'FavoritesModel');
-
-		$result = $model -> checkItem(@$values['object_id'], $values['url'], $values['name'], $values['id'], $values['type'], $user -> id);
-
+		$result = $model -> checkItem(@$values['object_id'], $values['url'], $values['name'], $values['id'], $values['scope_id'], $user->id  );
+		
 		if ($result) {
 			$html = "Favorite already exists";
 			$success = 'FALSE';
@@ -117,7 +134,6 @@ class FavoritesControllerItems extends FavoritesController {
 			$newFavorite -> load();
 			$newFavorite -> object_id = @$values['object_id'];
 			$newFavorite -> scope_id = @$values['scope_id'];
-			$newFavorite -> type = $values['type'];
 			$newFavorite -> name = $values['name'];
 			$newFavorite -> user_id = $user -> id;
 			$newFavorite -> url = $values['url'];
@@ -138,9 +154,9 @@ class FavoritesControllerItems extends FavoritesController {
 			$newFavorite -> params = $insertParams;
 			$newFavorite -> datecreated = $date -> toMySQL();
 			$newFavorite -> enabled = '1';
-
-			if ($newFavorite -> store()) {
-				$html = "Favorite Added";
+			$dump = $this->grab_dump($values);
+			if($newFavorite -> store()) {
+				$html = "Favorite Added" . $dump;
 				$success = 'TRUE';
 			} else {
 				$success = 'FALSE';
@@ -148,10 +164,11 @@ class FavoritesControllerItems extends FavoritesController {
 
 		}
 		$response = array();
-		$response['msg'] = $html;
+        $response['msg'] = $html;
 		$response['success'] = $success;
-		echo( json_encode($response));
-
+		
+        echo ( json_encode( $response ) );	
+		
 	}
 
 	public function removeFavorite($plugin) {
@@ -172,5 +189,9 @@ class FavoritesControllerItems extends FavoritesController {
 
 	}
 
+
+
+
 }
+
 ?>

@@ -5,6 +5,10 @@
        <url>index.php?option=com_favorites&#38;view=items</url>
    </link>
    <link>
+       <name>Scopes</name>
+       <url>index.php?option=com_favorites&#38;view=scopes</url>
+   </link>
+   <link>
        <name>Configuration</name>
        <url>index.php?option=com_favorites&#38;view=config</url>
    </link>
