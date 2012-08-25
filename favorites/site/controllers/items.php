@@ -46,7 +46,7 @@ class FavoritesControllerItems extends FavoritesController
             $model->setState( 'filter_userid', $user_id);           
         } else {
         	//GUEST
-        	// redirect to login probably
+        	//TODO redirect to login probably, should not let a user that is not logged in request this list. 
         }
 		
 		$state['filter_enabled']  = 1;      
@@ -78,7 +78,7 @@ class FavoritesControllerItems extends FavoritesController
             // use it
             $model->setState( 'filter_userid', $user_id);           
         } else {
-        	// redirect to login probably
+        	// redirect to login probably,  shouldn't even need this really i think should be be don'e already in the model
         }
         
         
@@ -111,6 +111,19 @@ class FavoritesControllerItems extends FavoritesController
 	public function addFavorite() {
 		$date = new JDate();
 		$user = JFactory::getUser();
+		
+		// this is kind of annoying trying to support submint both forms and not forms  maybe we should just  make one single method
+		/*
+		 *  like  what if the url would contain all the info. 
+		 * 
+		 * like /index.php?option=com_favorites&task=addFavorite&format=raw&view=items&name=Something%20Like&url=http://something.com&scope_id=3&object_id=4
+		 * 
+		 * And we just make a helper that addeds the links, all the add buttons being anchor tags
+		 * 
+		 * we can than just have really simple javacript to just post to the url, and high itself on success.
+		 * 
+		 */
+		
 		$elements = json_decode(preg_replace('/[\n\r]+/', '\n', JRequest::getVar('elements', '', 'post', 'string')));
 		$helper = new DSCHelper();
 		$values = $helper -> elementsToArray($elements);
@@ -154,9 +167,9 @@ class FavoritesControllerItems extends FavoritesController
 			$newFavorite -> params = $insertParams;
 			$newFavorite -> datecreated = $date -> toMySQL();
 			$newFavorite -> enabled = '1';
-			$dump = $this->grab_dump($values);
+			//$dump = $this->grab_dump($values);
 			if($newFavorite -> store()) {
-				$html = "Favorite Added" . $dump;
+				$html = "Favorite Added";
 				$success = 'TRUE';
 			} else {
 				$success = 'FALSE';
@@ -179,7 +192,7 @@ class FavoritesControllerItems extends FavoritesController
 		$values = $helper -> elementsToArray($elements);
 
 		//
-		if ($values['add_type'] == 'removeFavorite' && $values['id']) {
+		if ($values['id']) {
 			$favorite = JTable::getInstance('Items', 'FavoritesTable');
 			$favorite -> delete($values['id']);
 			return 'Favorite removed';
