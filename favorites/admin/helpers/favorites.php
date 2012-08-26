@@ -6,62 +6,99 @@
  * @link    http://www.dioscouri.com
  * @copyright Copyright (C) 2007 Dioscouri Design. All rights reserved.
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
-*/
+ */
 
 /** ensure this file is being included by a parent file */
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
-if ( !class_exists('Tags') ) {
-    JLoader::register( "Favorites", JPATH_ADMINISTRATOR.DS."components".DS."com_favorites".DS."defines.php" );
+if (!class_exists('Tags')) {
+	JLoader::register("Favorites", JPATH_ADMINISTRATOR . DS . "components" . DS . "com_favorites" . DS . "defines.php");
 }
 
-class FavoritesHelperFavorites extends JObject
-{
-	
+class FavoritesHelperFavorites extends JObject {
+
 	public function addFavButton($object_id, $scope_id, $name, $url = null, $text = 'Add', $attribs = '') {
 		$html = '';
-		$html .= '<a id="fav'.$object_id.'-'.$scope_id.'" class="addFav favorites"';
+		$html .= '<a id="fav' . $object_id . '-' . $scope_id . '" class="addFav favorites"';
 		$html .= ' href="';
-		$html .= $this->makeurl($object_id, $scope_id, $name, $url);
-		$html .= '">'.$text;
+		$html .= $this -> makeurl($object_id, $scope_id, $name, $url);
+		$html .= '">' . $text;
 		$html .= '</a>';
-		
-		
+
+		return $html;
+
 	}
-	
-	public function removeFavButton($fav_id, $object_id = NULL, $scope_id = NULL, $name = NULL ) {
-		
+
+	public function removeFavButton($fid, $object_id, $scope_id, $name, $url = null, $text = 'remove', $attribs = '') {
+		$html = ''; 
+		$html .= '<a id="fav' . $object_id . '-' . $scope_id . '" class="removeFav favorites"';
+		$html .= ' href="';
+		$html .= $this -> removeurl($fid,$object_id, $scope_id, $name, $url);
+		$html .= '">' . $text;
+		$html .= '</a>';
+
+		return $html;
 	}
-	
-	public function favButton($fav_id, $object_id = NULL, $scope_id = NULL, $name = NULL ) {
-		// this will be the function used to generate buttons in layouts. 
-	
-	// do itemCheck
-	
-	//than if item exits, show the remove button, if not show the add button. 
+
+	public function favButton($object_id, $scope_id, $name, $url = null, $text = 'Add', $attribs = '') {
+
+		$user = JFactory::getUser();
+		if ($user -> id) {
+			$model = DSCModel::getInstance('Items', 'FavoritesModel');
+			if ($model -> checkItem('', $object_id, $scope_id, $name, $url, $user -> id)) {
+				return $this -> addFavButton($object_id, $scope_id, $name, $url, $text , $attribs);
+			} else {
+				return $this -> removeFavButton('',$object_id, $scope_id, $name, $url, $text , $attribs);
+			}
+		}
 	}
-	
-	
+
 	function makeurl($object_id, $scope_id, $name, $url = null) {
-		
+
 		//$u = JFactory::getURI();
-		$url = '';
-		$url .= JURI::root();
-		$url .= '/index.php?option=com_favorites&task=add&format=raw&view=items';
-		if(!empty($object_id)){
-		$url .= '&oid='.$object_id;	
+		$href = '';
+		$href .= JURI::root();
+		$href .= 'index.php?option=com_favorites&task=add&format=raw&view=items';
+		if (!empty($object_id)) {
+			$href .= '&oid=' . $object_id;
 		}
-		if(!empty($scope_id)){
-		$url .= '&sid='.$scope_id;	
+		if (!empty($scope_id)) {
+			$href .= '&sid=' . $scope_id;
 		}
-		if(!empty($name)){
-		$url .= '&n='.$name;	
+		if (!empty($name)) {
+			$href .= '&n=' . $name;
 		}
-		if(!empty($url)){
-		$url .= '&u='.$url;	
+		if (!empty($url)) {
+			$href .= '&u=' . $url;
 		}
-		
-		return $url;
+		//$href .= '&jsoncallback=test()';
+
+		return $href;
 	}
+	function removeurl($fid,$object_id, $scope_id, $name, $url = null) {
+
+		//$u = JFactory::getURI();
+		$href = '';
+		$href .= JURI::root();
+		$href .= 'index.php?option=com_favorites&task=remove&format=raw&view=items';
+		if (!empty($fid)) {
+			$href .= '&fid=' . $fid;
+		}
+		if (!empty($object_id)) {
+			$href .= '&oid=' . $object_id;
+		}
+		if (!empty($scope_id)) {
+			$href .= '&sid=' . $scope_id;
+		}
+		if (!empty($name)) {
+			$href .= '&n=' . $name;
+		}
+		if (!empty($url)) {
+			$href .= '&u=' . $url;
+		}
+
+		return $href;
+	}
+
 }

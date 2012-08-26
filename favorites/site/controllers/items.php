@@ -92,7 +92,7 @@ class FavoritesControllerItems extends FavoritesController
             $model->setState( $key, $value );
         }
   
-		$params		= $app->getParams();
+		$params	= $app->getParams();
         $list = $model->getList();
 		
 	    $view->assign( 'items', $list );
@@ -102,12 +102,6 @@ class FavoritesControllerItems extends FavoritesController
         parent::display($cachable, $urlparams);
 	}
 
-	function grab_dump($var)
-{
-    ob_start();
-    var_dump($var);
-    return ob_get_clean();
-}
 
 	function add() {
 		
@@ -161,7 +155,26 @@ class FavoritesControllerItems extends FavoritesController
         echo ( json_encode( $response ) );
 		
 	}
-
+	
+	function remove() {
+		
+		//do a user ID check verse the ID they are trying to delete
+		$fid = JRequest::getVar('fid');
+		$response = array();
+		if ($fid) {
+			$favorite = JTable::getInstance('Items', 'FavoritesTable');
+			
+			if($favorite -> delete($fid)){
+				$html = 'Favorite removed';
+			}
+		} else {
+			$html = 'Favorite not removed';
+		}
+		$response['msg'] = $html;
+		$response['success'] = $success;
+		
+		echo ( json_encode( $response ) );
+	}
 
 
 	public function addFavorite() {
@@ -241,7 +254,6 @@ class FavoritesControllerItems extends FavoritesController
 	}
 
 	public function removeFavorite($plugin) {
-		$date = new JDate();
 
 		$elements = json_decode(preg_replace('/[\n\r]+/', '\n', JRequest::getVar('elements', '', 'post', 'string')));
 		$helper = new DSCHelper();

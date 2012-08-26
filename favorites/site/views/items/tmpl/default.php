@@ -10,12 +10,16 @@ foreach ($list as $item) {
 	// etc
 
 }
-
+DSC::loadJQuery();
 JHTML::_('behavior.modal');
 JHTML::_('script', 'favorites.js', 'media/com_favorites/js/');
 
-DSC::loadJQuery();
+
 $edit = Favorites::getInstance() -> get('favorites_can_edit', '0');
+
+
+ Favorites::load( 'FavoritesHelperFavorites', 'helpers.school' );
+        $helper = new FavoritesHelperFavorites();
 ?>
 
 <div id="Favorites">
@@ -54,39 +58,14 @@ No Favorites yet.
 
 
 <h1>Example add from form</h1>
-<form action="" method="post" class="favForm" name="favForm" id="favForm" enctype="multipart/form-data">
-<input name="id" type="hidden" value="" id="id">
-scope_id:<input name="scope_id" type="text" value="1" id="scope_id">
-url:<input name="url" type="text" value="http://www.fakeur.com" id="url">
-name:<input name="name" type="text" value="Testing Form" id="name">
-<input type="button" onclick="Favorites.addFormFavorite( 'form_files', 'Adding Favorite' );" value="Add too Favorites">
-
-</form>
+<?php echo $helper->addFavButton(1,1,'Fav Button'); ?>
+<div class="result"></div>
 <hr>
 <h1>Example add from Jquery</h1>
-<script>
-var url = '/index.php?option=com_favorites&task=addFavorite&format=raw&view=items';
+<body>
+  <div id="images">
 
-var data = '';
-jQuery(document).ready(function() {
-jQuery("#secondway").click(function () {
-	
-	var postdata = {};
-postdata.scope_id = 2;
-postdata.url = "http://www.fakeur.com";
-postdata.name = "Second way";
-	post =  JSON.stringify(postdata);
-	alert(post);
-     jQuery.post(url, { elements:post  },
- function(data){
-   console.log(data.msg); 
-   console.log(data.success); 
- }, "json");
-    });
-});
-
-</script>
-<button id="secondway" name="secondway">Second way just jQuery</button>
+</div>
 
 
 </div>
