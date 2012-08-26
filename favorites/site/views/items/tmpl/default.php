@@ -11,14 +11,14 @@ foreach ($list as $item) {
 
 }
 DSC::loadJQuery();
-JHTML::_('behavior.modal');
+//JHTML::_('behavior.modal');
 JHTML::_('script', 'favorites.js', 'media/com_favorites/js/');
 
 
 $edit = Favorites::getInstance() -> get('favorites_can_edit', '0');
 
 
- Favorites::load( 'FavoritesHelperFavorites', 'helpers.school' );
+ Favorites::load( 'FavoritesHelperFavorites', 'helpers.favorites' );
         $helper = new FavoritesHelperFavorites();
 ?>
 

@@ -12,14 +12,22 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
-if (!class_exists('Tags')) {
-	JLoader::register("Favorites", JPATH_ADMINISTRATOR . DS . "components" . DS . "com_favorites" . DS . "defines.php");
+if (!class_exists('Favorites')) {
+	JLoader::register("Favorites", JPATH_ADMINISTRATOR . "/components/com_favorites/defines.php");
 }
+
+JTable::addIncludePath(JPATH_ADMINISTRATOR.'/components/com_favorites/tables');
 
 class FavoritesHelperFavorites extends JObject {
 
+	function __construct(){
+		DSC::loadJQuery();
+		JHTML::_('script', 'favorites.js', 'media/com_favorites/js/');
+	}
+
 	public function addFavButton($object_id, $scope_id, $name, $url = null, $text = 'Add', $attribs = '') {
 		$html = '';
+		$html .= '';
 		$html .= '<a id="fav' . $object_id . '-' . $scope_id . '" class="addFav favorites"';
 		$html .= ' href="';
 		$html .= $this -> makeurl($object_id, $scope_id, $name, $url);
@@ -30,9 +38,9 @@ class FavoritesHelperFavorites extends JObject {
 
 	}
 
-	public function removeFavButton($fid, $object_id, $scope_id, $name, $url = null, $text = 'remove', $attribs = '') {
+	public function removeFavButton($fid = null, $object_id = null, $scope_id = null, $name = null, $url = null, $text = 'remove', $attribs = '') {
 		$html = ''; 
-		$html .= '<a id="fav' . $object_id . '-' . $scope_id . '" class="removeFav favorites"';
+		$html .= '<a id="fav-' . $fid. '" class="removeFav favorites"';
 		$html .= ' href="';
 		$html .= $this -> removeurl($fid,$object_id, $scope_id, $name, $url);
 		$html .= '">' . $text;
@@ -41,15 +49,19 @@ class FavoritesHelperFavorites extends JObject {
 		return $html;
 	}
 
-	public function favButton($object_id, $scope_id, $name, $url = null, $text = 'Add', $attribs = '') {
+	public function favButton($object_id, $scope_id, $name, $url = null, $text = array("Add", "Remove"), $attribs = '') {
 
 		$user = JFactory::getUser();
 		if ($user -> id) {
+			JModel::addIncludePath( JPATH_ADMINISTRATOR.'/components/com_favorites/models' );
 			$model = DSCModel::getInstance('Items', 'FavoritesModel');
-			if ($model -> checkItem('', $object_id, $scope_id, $name, $url, $user -> id)) {
-				return $this -> addFavButton($object_id, $scope_id, $name, $url, $text , $attribs);
+			
+			$fid = $model -> checkItem($object_id, $scope_id, $name, $url, $user -> id);
+		
+			if ($fid) {
+				return $this -> removeFavButton($fid);
 			} else {
-				return $this -> removeFavButton('',$object_id, $scope_id, $name, $url, $text , $attribs);
+				return $this -> addFavButton($object_id, $scope_id, $name, $url, $text[0] , $attribs);
 			}
 		}
 	}
@@ -76,7 +88,7 @@ class FavoritesHelperFavorites extends JObject {
 
 		return $href;
 	}
-	function removeurl($fid,$object_id, $scope_id, $name, $url = null) {
+	function removeurl($fid = null,$object_id = null, $scope_id= null, $name= null, $url = null) {
 
 		//$u = JFactory::getURI();
 		$href = '';

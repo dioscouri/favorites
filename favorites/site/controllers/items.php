@@ -115,9 +115,10 @@ class FavoritesControllerItems extends FavoritesController
 			$scope_id = JRequest::getVar('sid');
 			$date = new JDate();
 			//get the model
+			JTable::addIncludePath(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_favorites'.DS.'tables');
 			$model = DSCModel::getInstance('Items','FavoritesModel');
-			if($model->checkItem('', $object_id, $scope_id, $name, $url, $user->id  )){
-			
+			$check = $model->checkItem($object_id, $scope_id, $name, $url, $user->id  );
+			if(!$check){
 			//OK we are good to add the new object
 			$table = DSCTable::getInstance('Items', 'FavoritesTable');
 			$table -> load();
@@ -130,28 +131,30 @@ class FavoritesControllerItems extends FavoritesController
 			
 			$table -> datecreated = $date -> toMySQL();
 			$table -> enabled = '1';
+			$table -> store();
+		 Favorites::load( 'FavoritesHelperFavorites', 'helpers.favorites' );
+      	  $helper = new FavoritesHelperFavorites();
+			$html = "Favorite Added";
+			$success = 'TRUE';
 			
-			if($table -> store()) {
-				$html = "Favorite Added";
-				$success = 'TRUE';
+				
 			} else {
-				$success = 'FALSE';
-			}	
-				
-				
+			//not logged in
+			$html = "Already Exsits";
+			$success = 'FLASE';
 			}
-			
 			
 		} else {
 			//not logged in
 			$html = "Not authenicated";
-				$success = 'FLASE';
+			$success = 'FLASE';
 		}
+			
 		
 		$response = array();
         $response['msg'] = $html;
 		$response['success'] = $success;
-		
+		$response['btn'] = $helper->favButton($object_id, $scope_id, $name);	
         echo ( json_encode( $response ) );
 		
 	}
@@ -162,16 +165,26 @@ class FavoritesControllerItems extends FavoritesController
 		$fid = JRequest::getVar('fid');
 		$response = array();
 		if ($fid) {
+			JTable::addIncludePath(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_favorites'.DS.'tables');
 			$favorite = JTable::getInstance('Items', 'FavoritesTable');
+			$favorite -> load($fid);
+			$item = $favorite;
+			$favorite -> delete($fid);
 			
-			if($favorite -> delete($fid)){
-				$html = 'Favorite removed';
-			}
+			$html = 'Favorite removed';
+			$success = 'true';
+			 Favorites::load( 'FavoritesHelperFavorites', 'helpers.favorites' );
+      	  $helper = new FavoritesHelperFavorites();
+		  
+		  $response['btn'] = $helper->favButton($item->object_id, $item->scope_id, $item->name);
 		} else {
 			$html = 'Favorite not removed';
+			$success = 'false';
 		}
-		$response['msg'] = $html;
+		$response['msg'] = $item->name;
 		$response['success'] = $success;
+		
+		
 		
 		echo ( json_encode( $response ) );
 	}

@@ -38,7 +38,8 @@ class FavoritesControllerItems extends FavoritesController
 		$state['filter_id_from']   = $app->getUserStateFromRequest($ns.'name', 'filter_id_from', '', '');
 		$state['filter_id_to']   = $app->getUserStateFromRequest($ns.'name', 'filter_id_to', '', '');
       	$state['filter_userid'] 	= $app->getUserStateFromRequest($ns.'user_id', 'filter_userid', '', '');
-      	$state['filter_scope'] = $app->getUserStateFromRequest($ns.'scope', 'filter_scope', '', '');
+      	$state['filter_scope'] = $app->getUserStateFromRequest($ns.'scope_id', 'filter_scope', '', '');
+		$state['filter_object_id'] = $app->getUserStateFromRequest($ns.'object_id', 'filter_object_id', '', '');
 		$state['filter_url'] = $app->getUserStateFromRequest($ns.'url', 'filter_url', '', '');
       	$state['filter_datecreated'] = $app->getUserStateFromRequest($ns.'datecreated', 'filter_datecreated', '', '');
       	$state['filter_lastmodified'] = $app->getUserStateFromRequest($ns.'lastmodified', 'filter_lastmodified', '', '');

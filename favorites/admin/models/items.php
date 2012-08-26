@@ -23,6 +23,7 @@ class FavoritesModelItems extends FavoritesModelBase
        	$filter_name      = $this->getState('filter_name');
 		$filter_url    = $this->getState('filter_url');
     	$filter_scope    = $this->getState('filter_scope');
+		$filter_object_id    = $this->getState('filter_object_id');
     	$filter_userid     = $this->getState('filter_userid');
     	$filter_datecreated     = $this->getState('filter_datecreated ');
     	$filter_lastmodified    = $this->getState('filter_lastmodified');
@@ -68,6 +69,12 @@ class FavoritesModelItems extends FavoritesModelBase
     	{
     		$query->where("tbl.scope_id = '".$filter_scope."'");
     	}
+		
+		if (strlen($filter_object_id))
+    	{
+    		$query->where("tbl.object_id = '".$filter_object_id."'");
+    	}
+		
 		 if ($filter_url) 
         {
             $key    = $this->_db->Quote('%'.$this->_db->getEscaped( trim( strtolower( $filter_url ) ) ).'%');
@@ -191,20 +198,55 @@ class FavoritesModelItems extends FavoritesModelBase
 	/*This is  just a wrapper for setting states and calling getItem, so you can  say for a list view  load this modal and  just $modal->checkItem($pk); and get a yes no to show the  add box.*/
 	public function checkItem( $object_id = NULL, $scope_id = NULL , $name = NULL, $url = NULL, $user_id = NULL, $pk = NULL  ) {
 		
+		if(!$user_id) { $user = JFactory::getUser(); $user_id =  $user->id;  }
 		
-		$this->setState('filter_url', $url);
+	/*	$this->setState('filter_url', $url);
 		$this->setState('filter_name', $name);
 		$this->setState('filter_scope', $scope_id );
+		$this->setState('filter_object_id', $object_id );
 		if(!$user_id) {$user_id = $user_id = JFactory::getUser()->id; }
-		$this->setState('$user_id', $user_id);
-	
+		$this->setState('user_id', $user_id);
 		$item = parent::getItem($pk); 
+
 		if($item) {
 			return FALSE;
 		} else {
 			return TRUE; 
 		}
-	
+	 */
+	  	$db = JFactory::getDBO();
+        $query = $db->getQuery(true);
+        $query->select('id');
+        $query->from('#__favorites_items AS tbl');
+       // $query->leftJoin('#__favorites_scopes AS s ON tbl.scope_id = s.scope_id');
+		if($object_id) {
+		 $query->where('tbl.object_id = '. (int) $object_id);
+		}
+		
+		if($user_id) {
+		 $query->where('tbl.user_id = '. (int) $user_id);
+		}
+		
+		if($scope_id) {
+		 $query->where('tbl.scope_id = '. (int) $scope_id);
+		}
+		if($url) {
+		 $query->where('tbl.url = '. $url);
+		}
+		if($pk) {
+		 $query->where('tbl.id = '.  (int) $pk);
+		}
+    
+        $db->setQuery($query);
+		
+		$item = $db->loadResult();
+		return $item;
+       
+	 
+	 
+	 
+	 
+	 
 	}
 	
 	
