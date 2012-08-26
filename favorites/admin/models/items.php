@@ -189,9 +189,9 @@ class FavoritesModelItems extends FavoritesModelBase
 	
 	
 	/*This is  just a wrapper for setting states and calling getItem, so you can  say for a list view  load this modal and  just $modal->checkItem($pk); and get a yes no to show the  add box.*/
-	public function checkItem( $pk = NULL, $url = NULL, $name = NULL, $id = NULL, $scope_id = NULL, $user_id = NULL  ) {
+	public function checkItem( $object_id = NULL, $scope_id = NULL , $name = NULL, $url = NULL, $user_id = NULL, $pk = NULL  ) {
 		
-		$this->setState('filter_id_from', $id);
+		
 		$this->setState('filter_url', $url);
 		$this->setState('filter_name', $name);
 		$this->setState('filter_scope', $scope_id );
@@ -200,9 +200,9 @@ class FavoritesModelItems extends FavoritesModelBase
 	
 		$item = parent::getItem($pk); 
 		if($item) {
-			return TRUE;
+			return FALSE;
 		} else {
-			return FALSE; 
+			return TRUE; 
 		}
 	
 	}

@@ -108,6 +108,62 @@ class FavoritesControllerItems extends FavoritesController
     var_dump($var);
     return ob_get_clean();
 }
+
+	function add() {
+		
+		$user = JFactory::getUser();
+		
+		if($user->id){
+			//Check for posted/getVars
+			$name = urldecode(JRequest::getVar('n'));
+			$url = urldecode(JRequest::getVar('u'));	
+			$object_id = JRequest::getVar('oid');
+			$scope_id = JRequest::getVar('sid');
+			$date = new JDate();
+			//get the model
+			$model = DSCModel::getInstance('Items','FavoritesModel');
+			if($model->checkItem('', $object_id, $scope_id, $name, $url, $user->id  )){
+			
+			//OK we are good to add the new object
+			$table = DSCTable::getInstance('Items', 'FavoritesTable');
+			$table -> load();
+			$table -> object_id = @$object_id;
+			$table -> scope_id = @$scope_id;
+			$table -> name = $name;
+			$table -> user_id = $user -> id;
+			$table -> url = $url;
+			//unset things that are not params, and store everything else
+			
+			$table -> datecreated = $date -> toMySQL();
+			$table -> enabled = '1';
+			
+			if($table -> store()) {
+				$html = "Favorite Added";
+				$success = 'TRUE';
+			} else {
+				$success = 'FALSE';
+			}	
+				
+				
+			}
+			
+			
+		} else {
+			//not logged in
+			$html = "Not authenicated";
+				$success = 'FLASE';
+		}
+		
+		$response = array();
+        $response['msg'] = $html;
+		$response['success'] = $success;
+		
+        echo ( json_encode( $response ) );
+		
+	}
+
+
+
 	public function addFavorite() {
 		$date = new JDate();
 		$user = JFactory::getUser();
@@ -143,13 +199,13 @@ class FavoritesControllerItems extends FavoritesController
 			$html = "Favorite already exists";
 			$success = 'FALSE';
 		} else {
-			$newFavorite = DSCTable::getInstance('Items', 'FavoritesTable');
-			$newFavorite -> load();
-			$newFavorite -> object_id = @$values['object_id'];
-			$newFavorite -> scope_id = @$values['scope_id'];
-			$newFavorite -> name = $values['name'];
-			$newFavorite -> user_id = $user -> id;
-			$newFavorite -> url = $values['url'];
+			$table = DSCTable::getInstance('Items', 'FavoritesTable');
+			$table -> load();
+			$table -> object_id = @$values['object_id'];
+			$table -> scope_id = @$values['scope_id'];
+			$table -> name = $values['name'];
+			$table -> user_id = $user -> id;
+			$table -> url = $values['url'];
 			//unset things that are not params, and store everything else
 			unset($values['name']);
 			unset($values['object_id']);
@@ -164,11 +220,11 @@ class FavoritesControllerItems extends FavoritesController
 			}
 			$insertParams = json_encode($values);
 
-			$newFavorite -> params = $insertParams;
-			$newFavorite -> datecreated = $date -> toMySQL();
-			$newFavorite -> enabled = '1';
+			$table -> params = $insertParams;
+			$table -> datecreated = $date -> toMySQL();
+			$table -> enabled = '1';
 			//$dump = $this->grab_dump($values);
-			if($newFavorite -> store()) {
+			if($table -> store()) {
 				$html = "Favorite Added";
 				$success = 'TRUE';
 			} else {
