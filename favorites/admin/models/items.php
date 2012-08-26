@@ -166,6 +166,10 @@ class FavoritesModelItems extends FavoritesModelBase
 			$item->attribs = $registry->toObject();
 			//Modal Link
 			$item->form_link = 'index.php?option=com_favorites&controller=items&view=items&layout=form&tmpl=component&id='.$item->id;
+			if(empty($item->url)) {
+				$item->url = $item->scope_url . $item->object_id;
+			}
+			
 		}
 		
 		return $items;
