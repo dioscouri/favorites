@@ -93,7 +93,7 @@ class FavoritesControllerItems extends FavoritesController
         }
   
 		$params	= $app->getParams();
-        $list = $model->getList();
+        $list = $model->getItems();
 		
 	    $view->assign( 'items', $list );
 		$view->assign( 'params', $params );

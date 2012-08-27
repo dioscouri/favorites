@@ -25,6 +25,7 @@ $helper = new FavoritesHelperFavorites();
 	<?php foreach ($items as $scope => $favs) {
  	 echo '<h1>' . $scope . '</h1>';
 foreach ($favs as $id => $fav) {
+	var_dump($fav);
   	if(!empty($fav['url']) && !empty($fav['name'])){
   		?>
  <li id="fav<?php echo $fav['id']; ?>">

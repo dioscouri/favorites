@@ -49,7 +49,7 @@ class FavoritesHelperFavorites extends JObject {
 		return $html;
 	}
 
-	public function favButton($object_id, $scope_id, $name, $url = null, $text = array("Add", "Remove"), $attribs = null) {
+	public function favButton($object_id, $scope_id, $name, $url = null, $text = array("Add", "Remove"), $attribs = array('class' => 'addFav favorites')) {
 
 		$user = JFactory::getUser();
 		if ($user -> id) {
