@@ -6,6 +6,7 @@ $items = array();
 foreach ($list as $item) {
 	$items[$item -> scope_name][$item -> id]['id'] = $item -> id;
 	$items[$item -> scope_name][$item -> id]['url'] = $item -> url;
+
 	$items[$item -> scope_name][$item -> id]['name'] = $item -> name;
 	$items[$item -> scope_name][$item -> id]['edit_link'] = $item -> edit_link;
 	// etc
@@ -25,7 +26,6 @@ $helper = new FavoritesHelperFavorites();
 	<?php foreach ($items as $scope => $favs) {
  	 echo '<h1>' . $scope . '</h1>';
 foreach ($favs as $id => $fav) {
-	var_dump($fav);
   	if(!empty($fav['url']) && !empty($fav['name'])){
   		?>
  <li id="fav<?php echo $fav['id']; ?>">

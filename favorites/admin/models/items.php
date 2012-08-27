@@ -189,7 +189,9 @@ class FavoritesModelItems extends FavoritesModelBase
 			// Geting the username for list views, should we store the username in the favs table to cut overhead or better to do this? this avoids problems is someone changes  their username
 			$user = JFactory::getUser($item->user_id);
 			$item->username = $user->get('username');
-			
+			if(strlen($item->url) == 0) {
+				$item->url = $item->scope_url . $item->object_id;
+			}
 		}
 		
 		return $items;
