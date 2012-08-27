@@ -28,7 +28,7 @@ $helper = new FavoritesHelperFavorites();
 foreach ($favs as $id => $fav) {
   	if(!empty($fav['url']) && !empty($fav['name'])){
   		?>
- <li id="fav<?php echo $fav['id']; ?>">
+ <li id="fav-<?php echo $fav['id']; ?>">
 		<a href="<?php echo $fav['url'] ?>"><?php echo $fav['name']; ?></a>
 <?php $attribs = array('class' => 'delete favorites'); ?>
 <?php echo $helper->removeFavButton($fav['id'],NULL,NULL,NULL,NULL,'remove', $attribs); ?>
