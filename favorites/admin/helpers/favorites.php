@@ -28,7 +28,7 @@ class FavoritesHelperFavorites extends JObject {
 	public function addFavButton($object_id, $scope_id, $name, $url = null, $text = 'Add', $attribs = '') {
 		$html = '';
 		$html .= '';
-		$html .= '<a id="fav' . $object_id . '-' . $scope_id . '" class="addFav favorites"';
+		$html .= '<a id="fav-' . $object_id . '-' . $scope_id . '" class="addFav favorites"';
 		$html .= ' href="';
 		$html .= $this -> makeurl($object_id, $scope_id, $name, $url);
 		$html .= '">' . $text;
