@@ -25,10 +25,10 @@ class FavoritesHelperFavorites extends JObject {
 		JHTML::_('script', 'favorites.js', 'media/com_favorites/js/');
 	}
 
-	public function addFavButton($object_id, $scope_id, $name, $url = null, $text = 'Add', $attribs = '') {
+	public function addFavButton($object_id, $scope_id, $name, $url = null, $text = 'Add', $attribs = array('class' => 'addFav favorites'))  {
 		$html = '';
 		$html .= '';
-		$html .= '<a id="fav-' . $object_id . '-' . $scope_id . '" class="addFav favorites"';
+		$html .= '<a id="fav-' . $object_id . '-' . $scope_id . '" class="'.$attribs['class'].'"';
 		$html .= ' href="';
 		$html .= $this -> makeurl($object_id, $scope_id, $name, $url);
 		$html .= '">' . $text;
@@ -38,9 +38,9 @@ class FavoritesHelperFavorites extends JObject {
 
 	}
 
-	public function removeFavButton($fid = null, $object_id = null, $scope_id = null, $name = null, $url = null, $text = 'remove', $attribs = '') {
+	public function removeFavButton($fid = null, $object_id = null, $scope_id = null, $name = null, $url = null, $text = 'remove', $attribs = array('class' => 'removeFav favorites')) {
 		$html = ''; 
-		$html .= '<a id="fav-' . $fid. '" class="removeFav favorites"';
+		$html .= '<a id="fav-' . $fid. '" class="'.$attribs['class'].'"';
 		$html .= ' href="';
 		$html .= $this -> removeurl($fid,$object_id, $scope_id, $name, $url);
 		$html .= '">' . $text;
@@ -49,7 +49,7 @@ class FavoritesHelperFavorites extends JObject {
 		return $html;
 	}
 
-	public function favButton($object_id, $scope_id, $name, $url = null, $text = array("Add", "Remove"), $attribs = '') {
+	public function favButton($object_id, $scope_id, $name, $url = null, $text = array("Add", "Remove"), $attribs = null) {
 
 		$user = JFactory::getUser();
 		if ($user -> id) {
