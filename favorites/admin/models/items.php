@@ -224,7 +224,7 @@ class FavoritesModelItems extends FavoritesModelBase
         $query->from('#__favorites_items AS tbl');
        // $query->leftJoin('#__favorites_scopes AS s ON tbl.scope_id = s.scope_id');
 		if($object_id) {
-		 $query->where('tbl.object_id = '. (int) $object_id);
+		 $query->where('tbl.object_id = '. $db->Quote( $object_id ));
 		}
 		
 		if($user_id) {
@@ -235,7 +235,7 @@ class FavoritesModelItems extends FavoritesModelBase
 		 $query->where('tbl.scope_id = '. (int) $scope_id);
 		}
 		if($url) {
-		 $query->where('tbl.url = '. $url);
+		 $query->where('tbl.url = '. $db->Quote( $url ));
 		}
 		if($pk) {
 		 $query->where('tbl.id = '.  (int) $pk);

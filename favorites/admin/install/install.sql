@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `#__favorites_items` (
   `lastmodified` datetime DEFAULT NULL,
   `params` varchar(255) NOT NULL,
   `enabled` tinyint(4) NOT NULL,
-  `object_id` int(11) DEFAULT NULL,
+  `object_id` varchar(255) DEFAULT NULL,
   `scope_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 )

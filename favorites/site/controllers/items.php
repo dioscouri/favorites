@@ -106,6 +106,9 @@ class FavoritesControllerItems extends FavoritesController
 	function add() {
 		
 		$user = JFactory::getUser();
+
+		Favorites::load( 'FavoritesHelperFavorites', 'helpers.favorites' );
+		$helper = new FavoritesHelperFavorites();
 		
 		if($user->id){
 			//Check for posted/getVars
@@ -132,8 +135,7 @@ class FavoritesControllerItems extends FavoritesController
 			$table -> datecreated = $date -> toMySQL();
 			$table -> enabled = '1';
 			$table -> store();
-		 Favorites::load( 'FavoritesHelperFavorites', 'helpers.favorites' );
-      	  $helper = new FavoritesHelperFavorites();
+
 			$html = "Favorite Added";
 			$success = 'TRUE';
 			
