@@ -28,6 +28,55 @@
 					
 					<table class="adminlist">
                     <tbody>
+                    	<tr>
+                            <th style="width: 25%;">
+                                <?php echo JText::_( 'Add Button Text' ); ?>
+                            </th>
+                            <td>
+                                <input name="favorites_add_text" value="<?php echo $this->row->get('favorites_add_text', ''); ?>" type="text" size="75" />
+                            </td>
+                            
+                       </tr>
+                       <tr>
+                            <th style="width: 25%;">
+                                <?php echo JText::_( 'Remove Button Text' ); ?>
+                            </th>
+                            <td>
+                                <input name="favorites_remove_text" value="<?php echo $this->row->get('favorites_remove_text', ''); ?>" type="text" size="75" />
+                            </td>
+                            
+                       </tr>
+                        <tr>
+                            <th style="width: 25%;">
+                                <?php echo JText::_( 'ADD Button Class' ); ?>
+                            </th>
+                            <td>
+                                <input name="favorites_add_class" value="<?php echo $this->row->get('favorites_add_class', ''); ?>" type="text" size="75" />
+                            </td>
+                            
+                       </tr>
+                        <tr>
+                            <th style="width: 25%;">
+                                <?php echo JText::_( 'Remove Button Class' ); ?>
+                            </th>
+                            <td>
+                                <input name="favorites_remove_class" value="<?php echo $this->row->get('favorites_remove_class', ''); ?>" type="text" size="75" />
+                            </td>
+                            
+                       </tr>
+                       <tr>
+                            <th style="width: 25%;">
+                                <?php echo JText::_( 'Allow User to Edit Favorites' ); ?>
+                            </th>
+                            <td>
+                                <input name="favorites_can_edit" value="<?php echo $this->row->get('favorites_can_edit', ''); ?>" type="text" size="75" />
+                            </td>
+                            
+                        </tr>
+                    	
+                    	
+                    	
+                    	
                         <tr>
                             <th style="width: 25%;">
                                 <?php echo JText::_( 'Allow User to Edit Favorites' ); ?>

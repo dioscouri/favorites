@@ -25,10 +25,17 @@ class FavoritesHelperFavorites extends JObject {
 		JHTML::_('script', 'favorites.js', 'media/com_favorites/js/');
 	}
 
-	public function addFavButton($object_id, $scope_id, $name, $url = null, $text = 'Add', $attribs = array('class' => 'addFav favorites'))  {
+	public function addFavButton($object_id, $scope_id, $name, $url = null, $text = 'Add', $attribs = array() ) {
+		if(empty($text)){
+			$text = Favorites::getInstance()->get( 'favorites_add_text', 'Add' );
+			
+		}
+		if(empty($attribs['addclass'])) {
+			$attribs['addclass'] = Favorites::getInstance()->get( 'favorites_add_class', 'addFav favorites btn btn-primary' );
+		}
 		$html = '';
 		$html .= '';
-		$html .= '<a id="fav-' . $object_id . '-' . $scope_id . '" class="'.$attribs['class'].'"';
+		$html .= '<a id="fav-' . $object_id . '-' . $scope_id . '" class="'.$attribs['addclass'].'"  data-loading-text="Loading..."';
 		$html .= ' href="';
 		$html .= $this -> makeurl($object_id, $scope_id, $name, $url);
 		$html .= '">' . $text;
@@ -38,9 +45,15 @@ class FavoritesHelperFavorites extends JObject {
 
 	}
 
-	public function removeFavButton($fid = null, $object_id = null, $scope_id = null, $name = null, $url = null, $text = 'remove', $attribs = array('class' => 'removeFav favorites')) {
+	public function removeFavButton($fid = null, $object_id = null, $scope_id = null, $name = null, $url = null, $text = 'remove', $attribs = array()) {
+		if(empty($attribs['removeclass'])) {
+			$attribs['removeclass'] = Favorites::getInstance()->get( 'favorites_remove_class', 'removeFav favorites btn btn-danger' );
+		}
+		if(empty($text)){
+			$text = Favorites::getInstance()->get( 'favorites_remove_text', 'Remove' );
+		}
 		$html = ''; 
-		$html .= '<a id="fav-' . $fid. '" class="'.$attribs['class'].'"';
+		$html .= '<a id="fav-' . $fid. '" class="'.$attribs['removeclass'].'"  data-loading-text="Loading..."';
 		$html .= ' href="';
 		$html .= $this -> removeurl($fid,$object_id, $scope_id, $name, $url);
 		$html .= '">' . $text;
@@ -49,8 +62,15 @@ class FavoritesHelperFavorites extends JObject {
 		return $html;
 	}
 
-	public function favButton($object_id, $scope_id, $name, $url = null, $text = array("Add", "Remove"), $attribs = array('class' => 'addFav favorites')) {
-
+	public function favButton($object_id, $scope_id, $name, $url = null, $text = array(), $attribs = array()) {
+		if(empty($text)){
+			$text[0] = Favorites::getInstance()->get( 'favorites_add_text', 'Add' );
+			$text[1] = Favorites::getInstance()->get( 'favorites_remove_text', 'Remove' );
+		}
+		if(empty($attribs)){
+			$attribs['addclass'] = Favorites::getInstance()->get( 'favorites_add_class', 'addFav favorites btn btn-primary' );
+			$attribs['removeclass'] = Favorites::getInstance()->get( 'favorites_remove_class', 'removeFav favorites btn btn-danger' );
+		}
 		$user = JFactory::getUser();
 		if ($user -> id) {
 			JModel::addIncludePath( JPATH_ADMINISTRATOR.'/components/com_favorites/models' );
@@ -59,7 +79,7 @@ class FavoritesHelperFavorites extends JObject {
 			$fid = $model -> checkItem($object_id, $scope_id, $name, $url, $user -> id);
 		
 			if ($fid) {
-				return $this -> removeFavButton($fid);
+				return $this -> removeFavButton($fid, '','','','',$text[1]);
 			} else {
 				return $this -> addFavButton($object_id, $scope_id, $name, $url, $text[0] , $attribs);
 			}

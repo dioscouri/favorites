@@ -26,6 +26,10 @@ class Favorites extends DSC
     public $page_tooltip_config_disabled = '0';
     public $page_tooltip_tools_disabled = '0';
 	public $favorites_can_edit = '0';
+	public $favorites_add_text = 'Add';
+	public $favorites_remove_text = 'REMOVE';
+	public $favorites_add_class = 'addFav favorites btn btn-primary';
+	public $favorites_remove_class = 'removeFav favorites btn btn-danger';
 	/**
 	 * Returns the query
 	 * @return string The query to be used to retrieve the rows from the database

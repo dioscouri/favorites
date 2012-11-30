@@ -139,9 +139,9 @@ class FavoritesModelItems extends FavoritesModelBase
 		
 	}
 	
-	public function getItem($pk = null)
+	public function getItem($pk=null, $refresh=false, $emptyState=true)
 	{
-		if ($item = parent::getItem($pk)) {
+		if ($item = parent::getItem($pk, $refresh, $emptyState)) {
 			// Convert the params field to an object, than we can  have access to edit in the admi views, i change it to attribs to keep the json if needed. 
 			$registry = new JRegistry;
 			$registry->loadString($item->params);
@@ -173,6 +173,20 @@ class FavoritesModelItems extends FavoritesModelBase
 		}
 		
 		return $items;
+	}
+	
+	protected function prepareItem( &$item, $key=0, $refresh=false )
+	{
+		$item->link = 'index.php?option=com_favorites&controller=items&view=items&task=edit&id='.$item->id;
+			$item->edit_link = 'index.php?option=com_favorites&task=edit&tmpl=component&layout=form&id='.$item->id;
+			// Geting the username for list views, should we store the username in the favs table to cut overhead or better to do this? this avoids problems is someone changes  their username
+			$user = JFactory::getUser($item->user_id);
+			$item->username = $user->get('username');
+			if(strlen($item->url) == 0) {
+				$item->url = $item->scope_url . $item->object_id;
+			}
+			parent::prepareItem(&$item, $key, $refresh );
+	    
 	}
 	
 	//admin style lists
